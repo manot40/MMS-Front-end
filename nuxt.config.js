@@ -51,7 +51,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: process.env.API_HOST || "https://api.node.test"
+    baseURL: process.env.API_HOST
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
