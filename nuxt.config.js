@@ -11,7 +11,11 @@ export default {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" }
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    script: [
+      { src: 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js', nomodule:'' },
+      { src: 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js', type: 'module' }
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -47,7 +51,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: "https://api.node.test"
+    baseURL: process.env.API_HOST || "https://api.node.test"
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -88,7 +92,7 @@ export default {
           },
           refresh: { url: "/auth/refresh", method: "post" },
           user: { url: "/user/me", method: "get", propertyName: "data" },
-          logout: false
+          logout: { url: '/user/logout', method: 'delete' },
         },
         redirect: {
           login: "/login",

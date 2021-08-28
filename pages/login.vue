@@ -19,11 +19,11 @@
           required
         />
         <label class="cursor-pointer label mt-2 mb-8">
-          <span class="label-text">Remember me</span> 
-          <input type="checkbox" checked="checked" class="checkbox checkbox-primary" v-model="isRemember">
+          <span class="label-text">Keep logged in</span> 
+          <input type="checkbox" checked="checked" class="checkbox checkbox-primary" v-model="login.rememberMe">
         </label>
         <button
-          class="btn btn-wide w-full"
+          class="btn w-full"
           type="submit"
           v-bind:class="{ loading: isLoading }"
           :disabled="isLoading"
@@ -44,17 +44,16 @@ export default {
   data() {
     return {
       isLoading: false,
-      isRemember: true,
       login: {
         username: "",
         password: "",
+        rememberMe: true,
       },
     };
   },
   methods: {
     async userLogin() {
       this.isLoading = true;
-      if(!this.isRemember) console.log(JSON.stringify(this.$auth));
       await this.$auth
         .loginWith("local", { data: this.login })
         .then((res) => {
