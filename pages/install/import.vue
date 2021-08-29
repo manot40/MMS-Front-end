@@ -33,8 +33,8 @@
         <button
           class="flex-1 btn"
           type="submit"
-          v-bind:class="{ loading: isLoading }"
-          :disabled="isLoading"
+          v-bind:class="{ loading: isUploading }"
+          :disabled="isUploading"
           @click="loadExcelData"
         >
           Submit
@@ -80,6 +80,7 @@
         v-if="items.length"
         v-bind:class="{ loading: isLoading }"
         :disabled="isLoading"
+        @click="beginImport"
       >
         Submit
       </button>
@@ -178,7 +179,29 @@ export default {
         );
       }
     },
-    async beginImport() {},
+    async beginImport() {
+      this.isLoading = true;
+      const items = this.items;
+      const response = await this.$axios
+        .$post("/admin/item/batch", { items })
+        .then(function (res) {
+          return true;
+        })
+        .catch(function (err) {
+          return false;
+        });
+      if(response) {
+        this.isLoading = false;
+        this.$toast.success(
+          "Impor Berhasil"
+        );
+      } else {
+        this.isLoading = false;
+        this.$toast.error(
+          "Impor Gagal."
+        );
+      }
+    },
   },
 };
 </script>
