@@ -4,7 +4,16 @@
     <input
       ref="textBox"
       type="text"
-      class="input input-bordered w-56 sm:w-full md:w-full lg:w-full xl:w-full 2xl:w-full fd__display-textbox"
+      class="
+        input input-bordered
+        w-56
+        sm:w-full
+        md:w-full
+        lg:w-full
+        xl:w-full
+        2xl:w-full
+        fd__display-textbox
+      "
       :disabled="disabled"
       :value="displayText"
       :placeholder="placeholder"
@@ -18,7 +27,7 @@
       <ul
         class="
           p-2
-          shadow
+          shadow-lg
           menu
           dropdown-content
           bg-base-200
@@ -29,7 +38,6 @@
           z-10
         "
         tabindex="0"
-        v-if="filteredItems.length > 0"
       >
         <div class="fd__filter-input">
           <input
@@ -57,7 +65,19 @@
         >
           {{ textKey ? item[textKey] : item }}
         </li>
-        <li v-if="filteredItems.length === 0">No Items</li>
+        <li
+          v-if="filteredItems.length === 0"
+          class="
+            fd__item
+            p-4
+            mt-2
+            leading-none
+            cursor-default
+            rounded-xl
+          "
+        >
+          TIDAK DITEMUKAN
+        </li>
       </ul>
     </div>
   </div>
@@ -136,7 +156,7 @@ export default {
           try {
             this.$refs.filterTextBox.focus();
           } catch {
-              this.$toast.info('Harap pilih gudang terlebih dahulu');
+            this.$toast.info("Harap pilih gudang terlebih dahulu");
           }
         }
       });
