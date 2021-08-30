@@ -63,7 +63,7 @@
           </select>
         </div>
       </div>
-      <div class="overflow-x-auto max-h-96">
+      <div class="overflow-x-auto">
         <table class="table">
           <thead>
             <tr>
@@ -113,7 +113,7 @@
               </td>
               <td>
                 <button
-                  v-if="form.items.length > 1"
+                  v-show="form.items.length > 1"
                   class="btn btn-sm btn-error"
                   @click="rmTblData(index)"
                 >
@@ -149,16 +149,12 @@
 </template>
 
 <script>
-import FilterableDropdown from "../components/FilterableDropdown.vue";
 import dayjs from "dayjs";
 
 export default {
   beforeMount() {},
   mounted() {
     this.getWarehouseData();
-  },
-  components: {
-    FilterableDropdown,
   },
   data() {
     return {
@@ -173,7 +169,6 @@ export default {
         type: "out",
         warehouse: "",
         items: [
-          { item: "", quantity: "" },
           { item: "", quantity: "" },
           { item: "", quantity: "" },
         ],
@@ -233,18 +228,31 @@ export default {
           warehouse: data.warehouse,
           items: data.items,
         })
-        .then(function (res) {
+        .then(function () {
           return true;
         })
-        .catch(function (err) {
+        .catch(function () {
           return false;
         });
       if (response) {
         this.isLoading = false;
         this.$toast.success("Submit Berhasil");
+        resetForm();
       } else {
         this.isLoading = false;
         this.$toast.error("Submit Gagal.");
+      }
+    },
+    resetForm() {
+      this.form = {
+        txDate: dayjs().format("YYYY-MM-DD"),
+        description: dayjs().format("[Transaksi] DD MMMM"),
+        type: "out",
+        warehouse: "",
+        items: [
+          { item: "", quantity: "" },
+          { item: "", quantity: "" },
+        ],
       }
     },
   },

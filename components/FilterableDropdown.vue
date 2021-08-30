@@ -26,6 +26,7 @@
     >
       <ul
         class="
+          list_
           p-2
           shadow-lg
           menu
@@ -33,7 +34,7 @@
           bg-base-200
           rounded-box
           w-full
-          max-h-48
+          max-h-52
           overflow-x-hidden overflow-y-scroll
           z-10
         "
@@ -51,7 +52,7 @@
         <li
           class="
             fd__item
-            p-4
+            p-3
             mt-2
             leading-none
             hover:bg-base-300
@@ -172,3 +173,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.list_::-webkit-scrollbar {
+  display: none;
+}
+</style>
