@@ -7,7 +7,7 @@
             <div class="avatar">
               <div class="rounded-full w-14 h-14 shadow">
                 <img
-                  src="https://storage.googleapis.com/hybrid-chassis-283717.appspot.com/mms/images/avatar/{{default.jpg}}"
+                  src="https://storage.googleapis.com/hybrid-chassis-283717.appspot.com/mms/images/avatar/default.jpg"
                   alt=""
                 />
               </div>
