@@ -5,8 +5,7 @@
         INPUT TRANSAKSI BARU
       </h1>
       <p class="mb-8 text-left font-light antialiased tracking-wider">
-        Masukan detail transaksi pada form dan tambah item pada tabel yang
-        tersedia
+        Saat ini anda masuk sebagai: {{ this.$auth.user.name }}
       </p>
       <div class="flex xl:w-1/2 2xl:w-1/2">
         <div class="form-control mr-4">
@@ -237,7 +236,7 @@ export default {
       if (response) {
         this.isLoading = false;
         this.$toast.success("Submit Berhasil");
-        resetForm();
+        this.resetForm();
       } else {
         this.isLoading = false;
         this.$toast.error("Submit Gagal.");

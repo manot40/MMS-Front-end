@@ -46,7 +46,8 @@
             type="text"
             class="input input-sm w-full"
             placeholder="Cari Entry..."
-            v-model="filterString"
+            :value="filterString"
+            @input="e => filterString = e.target.value"
           />
         </div>
         <li

@@ -18,7 +18,7 @@
           v-model="login.password"
           required
         />
-        <label class="cursor-pointer label mt-2 mb-8">
+        <label class="cursor-pointer label mt-2 mb-8 invisible">
           <span class="label-text">Keep logged in</span> 
           <input type="checkbox" checked="checked" class="checkbox checkbox-primary" v-model="login.rememberMe">
         </label>
