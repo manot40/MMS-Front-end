@@ -7,7 +7,7 @@
             <div class="avatar">
               <div class="rounded-full w-14 h-14 shadow">
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Facebook_default_male_avatar.gif"
+                  src="https://storage.googleapis.com/hybrid-chassis-283717.appspot.com/mms/images/avatar/{{default.jpg}}"
                   alt=""
                 />
               </div>
