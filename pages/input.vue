@@ -198,9 +198,9 @@ export default {
     async getItemsData() {
       const warehouse = this.form.warehouse;
       const response = await this.$axios
-        .$get(`/warehouse/${warehouse}?itemOnly=true`)
+        .$get(`/item/?warehouse=${warehouse}`)
         .then(function (res) {
-          return res.items;
+          return res;
         })
         .catch(function (err) {
           console.log(err);
