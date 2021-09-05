@@ -207,7 +207,7 @@ export default {
           return false;
         });
       if (response) {
-        this.preload.items = response;
+        this.preload.items = response.data;
       }
     },
     async beginSubmit() {
