@@ -1,7 +1,11 @@
 <template>
   <div class="container mx-auto h-screen flex justify-center items-center -m-8">
     <div class="form-control m-auto w-3/4 xs:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/4">
-      <h1 class="mb-8 text-center font-bold text-3xl antialiased tracking-wider">LOGIN</h1>
+      <h1
+        class="mb-8 text-center font-bold text-3xl antialiased tracking-wider"
+      >
+        LOGIN
+      </h1>
       <form @submit.prevent="userLogin">
         <input
           type="text"
@@ -18,9 +22,14 @@
           v-model="login.password"
           required
         />
-        <label class="cursor-pointer label mt-2 mb-8 invisible">
-          <span class="label-text">Keep logged in</span> 
-          <input type="checkbox" checked="checked" class="checkbox checkbox-primary" v-model="login.rememberMe">
+        <label class="cursor-pointer label mt-2 mb-8">
+          <span class="label-text">Keep logged in</span>
+          <input
+            type="checkbox"
+            checked="checked"
+            class="checkbox"
+            v-model="login.rememberMe"
+          />
         </label>
         <button
           class="btn w-full"
@@ -61,7 +70,14 @@ export default {
           this.isLoading = false;
         })
         .catch((err) => {
-          this.$toast.error("Invalid Username or Password");
+          const code = err.toString().slice(-3);
+          if (code === "401") {
+            this.$toast.error("Username atau Password salah!");
+          } else if (code === "400") {
+            this.$toast.error("Username/Password yang dimasukkan invalid!");
+          } else {
+            this.$toast.error("Server Error, mohon coba lagi nanti");
+          }
           this.isLoading = false;
         });
     },

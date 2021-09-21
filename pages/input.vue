@@ -151,7 +151,6 @@
 import dayjs from "dayjs";
 
 export default {
-  beforeMount() {},
   mounted() {
     this.getWarehouseData();
   },
