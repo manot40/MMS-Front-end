@@ -25,8 +25,8 @@
           <ion-icon class="mr-2" style="font-size: 24px" name="document-text" />
           <p class="text-xl font-medium">Laporan Transaksi</p>
         </div>
-        <div class="flex flex-col collapse-content items-center">
-          <div class="inline-flex justify-center space-x-2 mb-4 w-11/12">
+        <div class="flex flex-col collapse-content items-center justify-center">
+          <div class="inline-flex justify-center space-x-2 px-2 mb-4 w-11/12">
             <div class="form-control flex-1">
               <label class="label">
                 <span class="label-text">Tanggal Awal</span>
