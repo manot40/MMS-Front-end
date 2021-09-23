@@ -26,14 +26,14 @@
           <p class="text-xl font-medium">Laporan Transaksi</p>
         </div>
         <div class="flex flex-col collapse-content items-center">
-          <div class="flex flex-row mb-4 w-11/12">
-            <div class="form-control w-1/2 mr-2">
+          <div class="space-x-2 mb-4 w-11/12">
+            <div class="form-control inline-block w-1/2">
               <label class="label">
                 <span class="label-text">Tanggal Awal</span>
               </label>
               <input type="date" v-model="reportDate.start" class="input input-bordered input-sm" />
             </div>
-            <div class="form-control w-1/2">
+            <div class="form-control inline-block w-1/2">
               <label class="label">
                 <span class="label-text">Tanggal Akhir</span>
               </label>
