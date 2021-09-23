@@ -26,7 +26,7 @@
           <p class="text-xl font-medium">Laporan Transaksi</p>
         </div>
         <div class="flex flex-col collapse-content items-center justify-center">
-          <div class="inline-flex justify-center space-x-2 px-2 mb-4 w-11/12">
+          <div class="inline-flex self-center justify-center space-x-2 px-2 mb-4 w-full">
             <div class="form-control flex-1">
               <label class="label">
                 <span class="label-text">Tanggal Awal</span>
