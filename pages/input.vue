@@ -203,6 +203,7 @@ export default {
       if (data.length) {
         this.preload.items = [...data];
       } else {
+        this.$toast.info("Gudang tidak memiliki daftar produk");
         this.preload.items = [];
       }
     },
