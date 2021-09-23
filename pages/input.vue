@@ -97,10 +97,7 @@
                 <input
                   type="number"
                   placeholder="Quantity"
-                  class="
-                    input input-bordered
-                    max-w-[8rem]
-                  "
+                  class="input input-bordered max-w-[8rem]"
                   v-model.trim="form.items[index].quantity"
                   :key="index"
                 />
@@ -163,7 +160,6 @@ export default {
         warehouse: "",
         items: [
           { item: "", quantity: "" },
-          { item: "", quantity: "" },
         ],
       },
     };
@@ -200,7 +196,7 @@ export default {
           console.log(err);
           return false;
         });
-      if (data.length) {
+      if(data) {
         this.preload.items = [...data];
       } else {
         this.$toast.info("Gudang tidak memiliki daftar produk");
@@ -209,21 +205,9 @@ export default {
     },
     async beginSubmit() {
       this.isLoading = true;
-      const data = {
-        txDate: dayjs(this.form.txDate).format("YYYY-MM-DDThh:mm:ss.SSSZ"),
-        description: this.form.description,
-        type: this.form.type,
-        warehouse: this.form.warehouse,
-        items: this.form.items,
-      };
+      const data = {...this.form};
       const response = await this.$axios
-        .$post("/transaction", {
-          txDate: data.txDate,
-          description: data.description,
-          type: data.type,
-          warehouse: data.warehouse,
-          items: data.items,
-        })
+        .$post("/transaction", {...data})
         .then(function () {
           return true;
         })
@@ -247,9 +231,9 @@ export default {
         warehouse: "",
         items: [
           { item: "", quantity: "" },
-          { item: "", quantity: "" },
         ],
-      }
+      };
+      this.preload.items = [];
     },
   },
 };
