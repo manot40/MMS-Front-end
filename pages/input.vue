@@ -99,12 +99,7 @@
                   placeholder="Quantity"
                   class="
                     input input-bordered
-                    w-28
-                    sm:w-full
-                    md:w-full
-                    lg:w-full
-                    xl:w-full
-                    2xl:w-full
+                    max-w-[8rem]
                   "
                   v-model.trim="form.items[index].quantity"
                   :key="index"
