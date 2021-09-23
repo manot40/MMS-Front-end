@@ -191,7 +191,7 @@ export default {
     },
     async getItemsData() {
       const warehouse = this.form.warehouse;
-      const response = await this.$axios
+      const { data } = await this.$axios
         .$get(`/item/?warehouse=${warehouse}`)
         .then(function (res) {
           return res;
@@ -200,8 +200,10 @@ export default {
           console.log(err);
           return false;
         });
-      if (response) {
-        this.preload.items = response.data;
+      if (data.length) {
+        this.preload.items = [...data];
+      } else {
+        this.preload.items = [];
       }
     },
     async beginSubmit() {
