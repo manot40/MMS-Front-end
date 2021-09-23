@@ -26,8 +26,8 @@
           <p class="text-xl font-medium">Laporan Transaksi</p>
         </div>
         <div class="flex flex-col collapse-content items-center">
-          <div class="flex flex-row mb-4 w-11/12 gap-x-2">
-            <div class="form-control w-1/2">
+          <div class="flex flex-row mb-4 w-11/12">
+            <div class="form-control w-1/2 mr-2">
               <label class="label">
                 <span class="label-text">Tanggal Awal</span>
               </label>
