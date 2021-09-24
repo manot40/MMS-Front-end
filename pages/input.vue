@@ -1,29 +1,29 @@
 <template>
   <div class="container mx-auto flex justify-center items-center mt-12">
-    <div class="block mx-auto w-11/12 md:w-10/12 lg:w-2/3 xl:w-2/3 2xl:w-2/3">
-      <h1 class="mb-2 text-left font-bold text-3xl antialiased tracking-wider">
+    <div class="block mx-auto w-1/2 sm:w-11/12 md:w-10/12 lg:w-2/3">
+      <h1 class="mb-2 text-left font-display font-bold text-3xl antialiased tracking-wider">
         INPUT TRANSAKSI BARU
       </h1>
-      <p class="mb-8 text-left font-light antialiased tracking-wider">
-        Saat ini anda masuk sebagai: {{ this.$auth.user.name }}
+      <p class="mb-8 text-left font-display antialiased tracking-wider">
+        Masuk sebagai: {{ this.$auth.user.name }}
       </p>
-      <div class="flex xl:w-1/2 2xl:w-1/2">
-        <div class="form-control mr-4">
+      <div class="flex mb-2 w-1/3 sm:w-full">
+        <div class="form-control w-full mr-4">
           <label class="label">
             <span class="label-text">Tanggal Transaksi</span>
           </label>
           <input
             type="date"
             v-model="form.txDate"
-            class="input input-bordered w-full"
+            class="input input-bordered"
           />
         </div>
-        <div class="form-control mr-4">
+        <div class="form-control w-full mr-4">
           <label class="label">
             <span class="label-text">Pilih Gudang</span>
           </label>
           <select
-            class="select select-bordered w-full max-w-xs"
+            class="select select-bordered"
             v-model="form.warehouse"
             @change="getItemsData()"
           >
@@ -37,8 +37,8 @@
           </select>
         </div>
       </div>
-      <div class="flex mb-8 xl:w-1/2 2xl:w-1/2">
-        <div class="form-control mr-4">
+      <div class="flex mb-8 w-1/3 sm:w-full">
+        <div class="form-control w-full mr-4">
           <label class="label">
             <span class="label-text">Deskripsi</span>
           </label>
@@ -49,28 +49,25 @@
             v-model="form.description"
           />
         </div>
-        <div class="form-control mr-4">
+        <div class="form-control w-full mr-4">
           <label class="label">
             <span class="label-text">Jenis</span>
           </label>
-          <select
-            class="select select-bordered w-full max-w-xs"
-            v-model="form.type"
-          >
+          <select class="select select-bordered" v-model="form.type">
             <option selected="selected" value="out">Keluar</option>
             <option selected="selected" value="in">Masuk</option>
           </select>
         </div>
       </div>
-      <div class="overflow-x-auto">
-        <table class="table">
+      <div class="sm:overflow-x-auto overflow-hidden">
+        <table class="table font-display">
           <thead>
             <tr>
               <th></th>
-              <th class="w-2/3">Item Name</th>
+              <th class="w-full">Item Name</th>
               <th>Quantity</th>
               <th>
-                <button class="btn btn-info btn-sm" @click="addTblData()">
+                <button class="btn btn-info font-sans btn-sm" @click="addTblData()">
                   <p class="font-bold">Tambah Baris</p>
                 </button>
               </th>
@@ -78,7 +75,7 @@
           </thead>
           <tbody>
             <tr v-for="(item, index) in form.items" :key="index">
-              <th scope="row" />
+              <td/>
               <td>
                 <FilterableDropdown
                   v-model="form.items[index].item"
@@ -91,14 +88,16 @@
                   valueKey="_id"
                   textKey="name"
                   filterTargetKey="name"
+                  style="min-width: 16rem"
                 />
               </td>
               <td>
                 <input
                   type="number"
                   placeholder="Quantity"
-                  class="input input-bordered max-w-[8rem]"
+                  class="input input-bordered"
                   v-model.trim="form.items[index].quantity"
+                  style="max-width: 8rem"
                   :key="index"
                 />
               </td>
@@ -119,7 +118,7 @@
               <th>Item Name</th>
               <th>Quantity</th>
               <th>
-                <button class="btn btn-info btn-sm">
+                <button class="btn btn-info font-sans btn-sm">
                   <p class="font-bold" @click="addTblData()">Tambah Baris</p>
                 </button>
               </th>
@@ -158,9 +157,7 @@ export default {
         description: dayjs().format("[Transaksi] DD MMMM"),
         type: "out",
         warehouse: "",
-        items: [
-          { item: "", quantity: "" },
-        ],
+        items: [{ item: "", quantity: "" }],
       },
     };
   },
@@ -196,7 +193,7 @@ export default {
           console.log(err);
           return false;
         });
-      if(data) {
+      if (data) {
         this.preload.items = [...data];
       } else {
         this.$toast.info("Gudang tidak memiliki daftar produk");
@@ -205,9 +202,9 @@ export default {
     },
     async beginSubmit() {
       this.isLoading = true;
-      const data = {...this.form};
+      const data = { ...this.form };
       const response = await this.$axios
-        .$post("/transaction", {...data})
+        .$post("/transaction", { ...data })
         .then(function () {
           return true;
         })
@@ -229,9 +226,7 @@ export default {
         description: dayjs().format("[Transaksi] DD MMMM"),
         type: "out",
         warehouse: "",
-        items: [
-          { item: "", quantity: "" },
-        ],
+        items: [{ item: "", quantity: "" }],
       };
       this.preload.items = [];
     },

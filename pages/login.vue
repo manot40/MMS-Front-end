@@ -1,6 +1,17 @@
 <template>
-  <div class="container mx-auto h-screen flex justify-center items-center -m-8">
-    <div class="form-control m-auto w-3/4 xs:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/4">
+  <div
+    class="
+      container
+      mx-auto
+      h-screen
+      flex
+      justify-center
+      items-center
+      font-display
+      -m-8
+    "
+  >
+    <div class="form-control m-auto w-1/4 sm:w-2/3 md:w-1/2 lg:w-1/3">
       <h1
         class="mb-8 text-center font-bold text-3xl antialiased tracking-wider"
       >
@@ -32,7 +43,7 @@
           />
         </label>
         <button
-          class="btn w-full"
+          class="btn w-full font-sans"
           type="submit"
           v-bind:class="{ loading: isLoading }"
           :disabled="isLoading"

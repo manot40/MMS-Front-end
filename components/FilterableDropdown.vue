@@ -21,7 +21,7 @@
       @click="textBoxClicked"
     />
     <div
-      class="absolute z-30 top-full -left-2 p-2 -mt-px w-full"
+      class="absolute z-10 top-full -left-2 p-2 -mt-px w-full"
       v-show="showList"
     >
       <ul
@@ -36,7 +36,6 @@
           w-full
           max-h-52
           overflow-x-hidden overflow-y-scroll
-          z-10
         "
         tabindex="0"
       >
