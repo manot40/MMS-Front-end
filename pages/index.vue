@@ -25,8 +25,8 @@
           <ion-icon class="mr-2" style="font-size: 24px" name="document-text" />
           <p class="text-xl font-medium">Laporan Transaksi</p>
         </div>
-        <div class="flex flex-col collapse-content items-center justify-center">
-          <div class="flex justify-center space-x-2 mb-5 w-11/12">
+        <div class="flex flex-col collapse-content items-center">
+		  <div class="flex justify-center space-x-2 mb-2 w-full">
             <div class="form-control max-w-[9.5rem]">
               <label class="label">
                 <span class="label-text">Tanggal Awal</span>
@@ -40,8 +40,26 @@
               <input type="date" v-model="reportDate.end" class="input input-bordered input-sm" />
             </div>
           </div>
+		  <div class="form-control self-center w-full mb-5">
+            <label class="label">
+              <span class="label-text">Pilih Gudang</span>
+            </label>
+            <select
+              class="select select-bordered self-center w-full"
+              v-model="warehouse"
+            >
+			  <option value="">All Warehouse</option>
+              <option
+                v-for="(item, index) in warehouseList"
+                :key="index"
+                :value="item._id"
+              >
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
           <a id="dlReport" class="hidden" href="" />
-          <button class="w-full self-center btn btn-primary min-w-min" @click="reportExport()">
+          <button class="w-full btn btn-primary min-w-min" @click="reportExport()">
             Download Report
           </button>
         </div>
@@ -71,6 +89,9 @@
 <script>
 import dayjs from 'dayjs'
 export default {
+  mounted() {
+    this.getWarehouseData();
+  },
   data() {
     return {
       reportDate: {
@@ -79,6 +100,8 @@ export default {
       },
       userName: this.$auth.user.name,
       userRole: this.$auth.user.role,
+	  warehouse: '',
+	  warehouseList: [],
     };
   },
   computed: {
@@ -92,15 +115,30 @@ export default {
       await this.$auth.logout();
       this.$router.push({ path: '/login' });
     },
+	async getWarehouseData() {
+      const response = await this.$axios
+        .$get("/warehouse")
+        .then(function (res) {
+          return res;
+        })
+        .catch(function (err) {
+          console.log(err);
+          return false;
+        });
+      if (response) {
+        this.warehouseList = response;
+      }
+    },
     async reportExport () {
-      const { start, end } = this.reportDate;
+      const { start, end } = this.reportDate
+	  const { warehouse } = this
       await this.$axios
-        .$get(`/transaction/export?startDate=${start}&endDate=${end}`, { responseType: 'blob' })
+        .$get(`/transaction/export?startDate=${start}&endDate=${end}&warehouse=${warehouse}`, { responseType: 'blob' })
         .then(function (res) {
           const url = window.URL.createObjectURL(new Blob([res]));
           const dlReport = document.getElementById('dlReport')
           dlReport.href = url;
-          dlReport.setAttribute('download', 'transactions.xlsx');
+          dlReport.setAttribute('download', `transactions_${warehouse}_${start}_${end}.xlsx`);
           dlReport.click();
         })
         .catch(function (err) {
