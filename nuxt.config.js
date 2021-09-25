@@ -81,6 +81,7 @@ export default {
         refreshToken: {
           property: "refreshToken",
           data: "refreshToken",
+          required: false,
           tokenRequired: true,
           maxAge: 60 * 60 * 24 * 30
         },
