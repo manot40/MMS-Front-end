@@ -84,6 +84,7 @@ export default {
           property: "refreshToken",
           data: "refreshToken",
           required: false,
+          tokenRequired: true,
         },
         user: {
           property: "data"
