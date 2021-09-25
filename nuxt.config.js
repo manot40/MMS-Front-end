@@ -79,11 +79,12 @@ export default {
         token: {
           property: "accessToken",
           global: true,
+          maxAge: 60 * 15,
         },
         refreshToken: {
           property: "refreshToken",
           data: "refreshToken",
-          required: false,
+          maxAge: 60 * 60 * 24 * 15,
         },
         user: {
           property: "data"
@@ -96,10 +97,10 @@ export default {
         },
         redirect: {
           login: "/login",
-          logout: "/",
+          logout: "/login",
           callback: "/login",
           home: "/"
-        }
+        },
       }
     }
   },
