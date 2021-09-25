@@ -81,7 +81,7 @@ export default {
           global: true,
         },
         refreshToken: {
-          property: false,
+          property: "refreshToken",
           data: "refreshToken",
           required: false,
         },
