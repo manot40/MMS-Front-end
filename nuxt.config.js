@@ -81,10 +81,9 @@ export default {
           global: true,
         },
         refreshToken: {
-          property: "refreshToken",
+          property: false,
           data: "refreshToken",
           required: false,
-          tokenRequired: true,
         },
         user: {
           property: "data"
