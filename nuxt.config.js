@@ -13,18 +13,24 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [
-      { src: 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js', nomodule:'' },
-      { src: 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js', type: 'module' }
-    ],
+      {
+        src: "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js",
+        nomodule: ""
+      },
+      {
+        src: "https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js",
+        type: "module"
+      }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~/static/style.css'],
+  css: ["~/static/style.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     //'~/plugins/litepie.js',
-    '~/plugins/v-select.js',
+    "~/plugins/v-select.js"
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -38,9 +44,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
-    // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
     "@nuxtjs/auth-next",
     [
@@ -75,28 +79,20 @@ export default {
         token: {
           property: "accessToken",
           global: true,
-          type: "Bearer",
-          maxAge: 60 * 15
         },
         refreshToken: {
           property: "refreshToken",
           data: "refreshToken",
           required: false,
-          tokenRequired: true,
-          maxAge: 60 * 60 * 24 * 30
         },
         user: {
           property: "data"
         },
         endpoints: {
-          login: {
-            url: "/auth/login",
-            method: "post",
-            propertyName: "accessToken"
-          },
+          login: { url: "/auth/login", method: "post" },
           refresh: { url: "/auth/refresh", method: "post" },
-          user: { url: "/user/me", method: "get", propertyName: "data" },
-          logout: { url: '/user/logout', method: 'delete' },
+          user: { url: "/user/me", method: "get" },
+          logout: { url: "/user/logout", method: "delete" }
         },
         redirect: {
           login: "/login",
