@@ -6,12 +6,7 @@
       type="text"
       class="
         input input-bordered
-        w-56
-        sm:w-full
-        md:w-full
-        lg:w-full
-        xl:w-full
-        2xl:w-full
+        w-full
         fd__display-textbox
       "
       :disabled="disabled"
