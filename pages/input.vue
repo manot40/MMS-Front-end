@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto flex justify-center items-center mt-12">
-    <div class="block mx-auto w-1/2 sm:w-11/12 md:w-10/12 lg:w-2/3">
+    <div class="flex flex-col mx-auto w-1/2 sm:w-11/12 md:w-10/12 lg:w-2/3">
       <h1 class="mb-2 text-left font-display font-bold text-3xl antialiased tracking-wider">
         INPUT TRANSAKSI BARU
       </h1>
@@ -59,8 +59,8 @@
           </select>
         </div>
       </div>
-      <div class="sm:overflow-x-auto overflow-hidden">
-        <table class="table font-display">
+      <div class="overflow-x-auto">
+        <table class="table mb-8 font-display">
           <thead>
             <tr>
               <th></th>
@@ -127,7 +127,7 @@
         </table>
       </div>
       <button
-        class="mt-8 btn w-full"
+        class="btn w-full mx-auto mt-2"
         v-bind:class="{ loading: isLoading }"
         :disabled="isLoading"
         @click="beginSubmit()"

@@ -123,7 +123,8 @@ export default {
     displayText() {
       const item = this.selectedItem;
       if (!item) return "";
-      return this.textKey ? item[this.textKey] : item;
+      console.log(item);
+      return this.textKey ? `${item[this.textKey]} (${item.unit})` : item;
     },
   },
   methods: {
