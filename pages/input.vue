@@ -172,7 +172,7 @@ export default {
       const response = await this.$axios
         .$get("/warehouse")
         .then(function (res) {
-          return res;
+          return res.data;
         })
         .catch(function (err) {
           console.log(err);
