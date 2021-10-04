@@ -94,9 +94,9 @@
         </div>
       </div>
       <div class="modal-action">
-        <button class="btn" id="closeButton" @click="closeModal()">
+        <label class="btn" id="closeButton" @click="closeModal()">
           Close
-        </button>
+        </label>
         <button class="btn btn-primary">Submit</button>
       </div>
     </form>
