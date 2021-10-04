@@ -32,12 +32,12 @@
             <p class="text-xl font-medium">Admin Panel</p>
           </div>
           <div class="flex flex-col space-y-2 collapse-content items-center">
-            <button
+            <a
               class="w-full btn min-w-min"
-              @click="isModalOpen = !isModalOpen"
+              href="#addItem"
             >
               Tambah Item Baru
-            </button>
+            </a>
             <button class="w-full btn min-w-min" @click="test()">
               Tambah User Baru
             </button>
@@ -134,8 +134,6 @@
       </div>
     </div>
     <AddItemModal
-      v-if="isModalOpen"
-      @modalClosed="isModalOpen = !isModalOpen"
       v-bind:state="modalState"
     />
   </div>
@@ -176,7 +174,7 @@ export default {
       const response = await this.$axios
         .$get("/warehouse")
         .then(function (res) {
-          return res;
+          return res.data;
         })
         .catch(function (err) {
           console.log(err);
