@@ -94,7 +94,9 @@
         </div>
       </div>
       <div class="modal-action">
-        <a class="btn" id="closeButton" href="#">Close</a>
+        <button class="btn" id="closeButton" @click="closeModal()">
+          Close
+        </button>
         <button class="btn btn-primary">Submit</button>
       </div>
     </form>
@@ -149,10 +151,13 @@ export default {
         });
       if (response) {
         this.$toast.success("Submit Berhasil");
-        document.getElementById("closeButton").click();
+        this.closeModal();
       } else {
         this.$toast.error("Submit Gagal");
       }
+    },
+    closeModal() {
+      window.history.back();
     }
   },
 };

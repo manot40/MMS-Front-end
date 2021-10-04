@@ -38,7 +38,7 @@
             >
               Tambah Item Baru
             </a>
-            <button class="w-full btn min-w-min" @click="test()">
+            <button class="w-full btn min-w-min">
               Tambah User Baru
             </button>
           </div>
@@ -151,7 +151,6 @@ export default {
         start: dayjs().startOf("months").format("YYYY-MM-DD"),
         end: dayjs().endOf("months").format("YYYY-MM-DD"),
       },
-      isModalOpen: false,
       modalState: 'item',
       userName: this.$auth.user.name,
       userRole: this.$auth.user.role,
@@ -206,9 +205,6 @@ export default {
           console.log(err);
           return false;
         });
-    },
-    test() {
-      console.log(this.isModalOpen);
     },
   },
 };
