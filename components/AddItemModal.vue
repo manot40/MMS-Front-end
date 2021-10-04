@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="flex flex-row mb-2 space-x-2">
-          <div class="form-control w-full">
+          <div class="form-control w-1/3">
             <label class="label">
               <span class="label-text">Gudang Barang</span>
             </label>
