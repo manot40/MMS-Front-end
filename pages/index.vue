@@ -142,7 +142,7 @@
 <script>
 import dayjs from "dayjs";
 export default {
-  mounted() {
+  created() {
     this.getWarehouseData();
   },
   data() {
@@ -159,7 +159,7 @@ export default {
     };
   },
   computed: {
-    checkRole: function () {
+    checkRole() {
       if (this.userRole === "admin") return "Administrator";
       if (this.userRole === "user") return "Standard User";
     },
