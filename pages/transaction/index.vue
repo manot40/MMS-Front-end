@@ -1,16 +1,7 @@
 <template>
   <div class="container mx-auto mt-12">
-    <div class="flex flex-col mx-auto w-2/3 sm:w-11/12 md:w-10/12">
-      <h1
-        class="
-          mb-4
-          text-left
-          font-display font-bold
-          text-3xl
-          antialiased
-          tracking-wider
-        "
-      >
+    <div class="flex flex-col mx-auto w-2/3 sm:w-11/12 md:w-10/12 font-display">
+      <h1 class="mb-4 text-left font-bold text-3xl antialiased tracking-wider">
         DAFTAR TRANSAKSI
       </h1>
       <div class="overflow-x-auto mb-4">
@@ -42,7 +33,7 @@
               <td>
                 <p
                   :class="{ 'badge-outline': trx.type === 'out' }"
-                  class="badge text-xs font-bold"
+                  class="badge text-xs font-bold w-12"
                 >
                   {{ trx.type.toUpperCase() }}
                 </p>
@@ -54,7 +45,7 @@
                     { 'badge-success': trx.status === 'posted' },
                     { 'badge-info': trx.status === 'draft' },
                   ]"
-                  class="badge text-xs font-bold"
+                  class="badge text-xs font-bold w-16"
                 >
                   {{ trx.status.toUpperCase() }}
                 </p>
