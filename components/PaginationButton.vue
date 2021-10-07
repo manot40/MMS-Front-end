@@ -1,7 +1,7 @@
 <template>
   <div class="btn-group">
     <button
-      v-if="totalPages > 5 && page - 1 >= 0"
+      v-if="totalPages > 5"
       :class="{ 'btn-active': page === 1 }"
       class="btn btn-sm"
       @click="pageChanged(1)"
