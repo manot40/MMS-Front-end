@@ -43,7 +43,7 @@
                   :class="[
                     { 'badge-error': trx.status === 'closed' },
                     { 'badge-success': trx.status === 'posted' },
-                    { 'badge-info': trx.status === 'draft' },
+                    { 'badge-info': trx.status === 'draft' }
                   ]"
                   class="badge text-xs font-bold w-16"
                 >
@@ -70,33 +70,12 @@
           </tbody>
         </table>
       </div>
-      <div class="btn-group self-center">
-        <button
-          v-for="i in state.btnGroup"
-          :key="'key_' + i"
-          :class="{ 'btn-active': state.currentPage === i }"
-          class="btn btn-sm"
-          @click="fetchTransactions(i)"
-        >
-          {{ i }}
-        </button>
-        <button
-          v-if="
-            state.totalPages > 5 &&
-            this.state.currentPage + 1 < this.state.totalPages
-          "
-          class="btn btn-sm btn-disabled"
-        >
-          ...
-        </button>
-        <button
-          v-if="state.totalPages > 5"
-          :class="{ 'btn-active': state.currentPage === state.totalPages }"
-          class="btn btn-sm"
-          @click="fetchTransactions(state.totalPages)"
-        >
-          {{ state.totalPages }}
-        </button>
+      <div class="self-center">
+        <PaginationButton
+          :page="state.currentPage"
+          :totalPages="state.totalPages"
+          @pageChanged="fetchTransactions($event)"
+        />
       </div>
     </div>
   </div>
@@ -106,17 +85,7 @@
 import dayjs from "dayjs";
 export default {
   created() {
-    this.fetchTransactions(1).then(() => {
-      if (this.state.totalPages <= 5) {
-        let i = 0;
-        while (i < this.state.totalPages) {
-          i++;
-          this.state.btnGroup.push(i);
-        }
-      } else {
-        this.state.btnGroup = [1, 2, 3];
-      }
-    });
+    this.fetchTransactions(1);
   },
   data() {
     return {
@@ -128,16 +97,16 @@ export default {
           warehouse: "",
           type: "",
           status: "",
-          description: "",
-        },
+          description: ""
+        }
       ],
       state: {
         btnGroup: [],
         limit: 10,
-        totalPages: "",
-        currentPage: 1,
+        totalPages: null,
+        currentPage: 1
       },
-      query: {},
+      query: {}
     };
   },
   methods: {
@@ -145,32 +114,28 @@ export default {
       const toast = this.$toast;
       const { data, totalPages } = await this.$axios
         .$get(`/transaction/?page=${page}&limit=${this.state.limit}`)
-        .then(function (res) {
+        .then(function(res) {
           return res;
         })
-        .catch(function (err) {
+        .catch(function(err) {
           toast.error(err);
           return false;
         });
       if (data) {
-        const payload = data.map((el) => ({
+        const payload = data.map(el => ({
           _id: el._id,
           txId: el.txId,
           txDate: dayjs(el.txDate).format("DD/MM/YYYY"),
           warehouse: el.warehouse.name,
           type: el.type,
           status: el.status,
-          description: el.description,
+          description: el.description
         }));
         this.state.currentPage = page;
-        this.state.totalPages = totalPages;
+        this.state.totalPages ??= totalPages;
         this.transactions = [...payload];
-        this.state.totalPages > 5 &&
-          page + 1 < this.state.totalPages &&
-          page - 1 > 0 &&
-          (this.state.btnGroup = [page - 1, page, page + 1]);
       }
-    },
-  },
+    }
+  }
 };
 </script>
