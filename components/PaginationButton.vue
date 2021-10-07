@@ -57,7 +57,7 @@ export default {
         }
         return x;
       } else {
-        return this.currentPage - 1 > 1
+        return this.currentPage > 3
           ? this.currentPage + 1 < this.totalPages
             ? [this.currentPage - 1, this.currentPage, this.currentPage + 1]
             : [this.totalPages - 3, this.totalPages - 2, this.totalPages - 1]
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     pageChanged(page) {
-      this.$emit("pageChanged", page);
+      if (page !== this.currentPage) this.$emit("pageChanged", page);
     }
   }
 };

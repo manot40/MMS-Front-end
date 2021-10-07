@@ -126,7 +126,6 @@ export default {
       }
       if (queryPage || page > 1) {
         this.$router.replace({
-          path: "transaction",
           query: {
             page,
             limit: this.state.limit,
