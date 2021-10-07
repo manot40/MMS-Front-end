@@ -57,8 +57,8 @@ export default {
         }
         return x;
       } else {
-        return this.page - 1 > 1
-          ? this.page + 1 < this.totalPages
+        return this.page > 0
+          ? this.page <= this.totalPages
             ? [this.page - 1, this.page, this.page + 1]
             : [this.totalPages - 3, this.totalPages - 2, this.totalPages - 1]
           : [2, 3, 4];
