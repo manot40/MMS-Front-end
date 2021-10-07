@@ -2,14 +2,14 @@
   <div class="btn-group">
     <button
       v-if="totalPages > 5"
-      :class="{ 'btn-active': page === 1 }"
+      :class="{ 'btn-active': currentpage === 1 }"
       class="btn btn-sm"
       @click="pageChanged(1)"
     >
       {{ 1 }}
     </button>
     <button
-      v-if="totalPages > 5 && page >= 4 && page - 1 > 0"
+      v-if="totalPages > 5 && currentPage >= 4 && currentPage - 1 > 0"
       class="btn btn-sm btn-disabled"
     >
       ...
@@ -24,14 +24,14 @@
       {{ i }}
     </button>
     <button
-      v-if="totalPages > 5 && page + 2 < totalPages"
+      v-if="totalPages > 5 && currentPage + 2 < totalPages"
       class="btn btn-sm btn-disabled"
     >
       ...
     </button>
     <button
       v-if="totalPages > 5"
-      :class="{ 'btn-active': page === totalPages }"
+      :class="{ 'btn-active': currentPage === totalPages }"
       class="btn btn-sm"
       @click="pageChanged(totalPages)"
     >
