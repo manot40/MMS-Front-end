@@ -43,12 +43,12 @@
 <script>
 export default {
   props: {
-    page: { type: Number, default: 1 },
+    currentPage: { type: Number, default: 1 },
     totalPages: { type: Number, default: 1 }
   },
   computed: {
     pages() {
-      if (this.totalPages && this.page > this.totalPages)
+      if (this.totalPages && this.currentPage > this.totalPages)
         return "NOTHING FOUND";
       if (this.totalPages <= 5) {
         let x = [];
@@ -57,9 +57,9 @@ export default {
         }
         return x;
       } else {
-        return this.page > 0
-          ? this.page <= this.totalPages
-            ? [this.page - 1, this.page, this.page + 1]
+        return this.currentPage > 0
+          ? this.currentPage <= this.totalPages
+            ? [this.currentPage - 1, this.currentPage, this.currentPage + 1]
             : [this.totalPages - 3, this.totalPages - 2, this.totalPages - 1]
           : [2, 3, 4];
       }

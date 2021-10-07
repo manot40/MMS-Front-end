@@ -72,7 +72,7 @@
       </div>
       <div class="self-center">
         <PaginationButton
-          :page="state.currentPage"
+          :currentPage="state.currentPage"
           :totalPages="state.totalPages"
           @pageChanged="fetchTransactions($event)"
         />
