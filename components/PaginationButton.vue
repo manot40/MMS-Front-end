@@ -21,7 +21,7 @@
       class="btn btn-sm"
       @click="pageChanged(page)"
     >
-      {{ i }}
+      {{ page }}
     </button>
     <button
       v-if="totalPages > 5 && currentPage + 2 < totalPages"
