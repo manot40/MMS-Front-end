@@ -24,7 +24,7 @@
       {{ i }}
     </button>
     <button
-      v-if="totalPages > 5 && page + 1 < totalPages"
+      v-if="totalPages > 5 && page + 2 < totalPages"
       class="btn btn-sm btn-disabled"
     >
       ...
