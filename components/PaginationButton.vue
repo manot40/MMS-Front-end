@@ -15,11 +15,11 @@
       ...
     </button>
     <button
-      v-for="i in pages"
-      :key="'key_' + i"
-      :class="{ 'btn-active': page === i }"
+      v-for="page in pages"
+      :key="'key_' + page"
+      :class="{ 'btn-active': currentPage === page }"
       class="btn btn-sm"
-      @click="pageChanged(i)"
+      @click="pageChanged(page)"
     >
       {{ i }}
     </button>
@@ -57,8 +57,8 @@ export default {
         }
         return x;
       } else {
-        return this.currentPage > 0
-          ? this.currentPage <= this.totalPages
+        return this.currentPage - 1 > 1
+          ? this.currentPage + 1 < this.totalPages
             ? [this.currentPage - 1, this.currentPage, this.currentPage + 1]
             : [this.totalPages - 3, this.totalPages - 2, this.totalPages - 1]
           : [2, 3, 4];
