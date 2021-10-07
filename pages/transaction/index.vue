@@ -10,7 +10,7 @@
             <tr>
               <th />
               <th>Kode Transaksi</th>
-              <th>Tanggal Transaksi</th>
+              <th>Tanggal</th>
               <th>Gudang</th>
               <th>Jenis</th>
               <th>Status</th>
