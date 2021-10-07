@@ -1,6 +1,20 @@
 <template>
   <div class="btn-group">
     <button
+      v-if="totalPages > 5 && page >= 3 && page - 1 > 0"
+      :class="{ 'btn-active': page === 1 }"
+      class="btn btn-sm"
+      @click="pageChanged(1)"
+    >
+      {{ 1 }}
+    </button>
+    <button
+      v-if="totalPages > 5 && page >= 4 && page - 1 > 0"
+      class="btn btn-sm btn-disabled"
+    >
+      ...
+    </button>
+    <button
       v-for="i in pages"
       :key="'key_' + i"
       :class="{ 'btn-active': page === i }"
@@ -34,6 +48,8 @@ export default {
   },
   computed: {
     pages() {
+      if (this.totalPages && this.page > this.totalPages)
+        return "NOTHING FOUND";
       if (this.totalPages <= 5) {
         let x = [];
         for (let i = 0; i < this.totalPages; i++) {

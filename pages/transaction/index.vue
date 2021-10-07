@@ -85,40 +85,28 @@
 import dayjs from "dayjs";
 export default {
   created() {
-    this.fetchTransactions(1);
+    this.fetchTransactions(this.state.currentPage);
   },
   data() {
     return {
-      transactions: [
-        {
-          _id: "",
-          txId: "",
-          txDate: "",
-          warehouse: "",
-          type: "",
-          status: "",
-          description: ""
-        }
-      ],
+      transactions: [],
       state: {
-        btnGroup: [],
-        limit: 10,
+        limit: parseInt(this.$route.query.limit) || 10,
         totalPages: null,
-        currentPage: 1
+        currentPage: parseInt(this.$route.query.page) || 1
       },
-      query: {}
     };
   },
   methods: {
     async fetchTransactions(page) {
-      const toast = this.$toast;
+      const queryPage = this.$route.query.page;
       const { data, totalPages } = await this.$axios
         .$get(`/transaction/?page=${page}&limit=${this.state.limit}`)
         .then(function(res) {
           return res;
         })
         .catch(function(err) {
-          toast.error(err);
+          console.log(err);
           return false;
         });
       if (data) {
@@ -134,6 +122,16 @@ export default {
         this.state.currentPage = page;
         this.state.totalPages ??= totalPages;
         this.transactions = [...payload];
+      } else {
+      }
+      if (queryPage || page > 1) {
+        this.$router.replace({
+          path: "transaction",
+          query: {
+            page,
+            limit: this.state.limit,
+          }
+        });
       }
     }
   }
