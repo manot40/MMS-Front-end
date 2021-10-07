@@ -1,7 +1,7 @@
 <template>
   <div class="btn-group">
     <button
-      v-if="totalPages > 5 && page >= 3 && page - 1 > 0"
+      v-if="totalPages > 5 && page - 1 >= 0"
       :class="{ 'btn-active': page === 1 }"
       class="btn btn-sm"
       @click="pageChanged(1)"
@@ -57,11 +57,11 @@ export default {
         }
         return x;
       } else {
-        return this.page - 1 > 0
+        return this.page - 1 > 1
           ? this.page + 1 < this.totalPages
             ? [this.page - 1, this.page, this.page + 1]
             : [this.totalPages - 3, this.totalPages - 2, this.totalPages - 1]
-          : [1, 2, 3];
+          : [2, 3, 4];
       }
     }
   },
