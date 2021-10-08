@@ -112,7 +112,7 @@ export default {
       if (data) {
         const payload = data.map(el => ({
           _id: el._id,
-          txId: el.txId,
+          txId: el.txId.replace(/(TRX-IN-|TRX-OUT-)/g, ''),
           txDate: dayjs(el.txDate).format("DD/MM/YYYY"),
           warehouse: el.warehouse.name,
           type: el.type,
