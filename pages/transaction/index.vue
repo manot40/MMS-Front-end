@@ -1,9 +1,23 @@
 <template>
   <div class="container mx-auto mt-12">
-    <div class="flex flex-col mx-auto w-2/3 sm:w-11/12 md:w-10/12 font-display">
-      <h1 class="mb-4 text-left font-bold text-3xl antialiased tracking-wider">
+    <div
+      class="
+        flex flex-col
+        mx-auto
+        w-2/3
+        sm:w-11/12
+        md:w-10/12
+        lg:w-10/12
+        font-display
+      "
+    >
+      <h1 class="mb-6 text-left font-bold text-3xl antialiased tracking-wider">
         DAFTAR TRANSAKSI
       </h1>
+      <FilterPanel
+        :fields="dataFields"
+        @filterChanged="filterChanged($event)"
+      />
       <div class="overflow-x-auto mb-4">
         <table class="table w-full">
           <thead>
@@ -43,7 +57,7 @@
                   :class="[
                     { 'badge-error': trx.status === 'closed' },
                     { 'badge-success': trx.status === 'posted' },
-                    { 'badge-info': trx.status === 'draft' }
+                    { 'badge-info': trx.status === 'draft' },
                   ]"
                   class="badge text-xs font-bold w-16"
                 >
@@ -74,7 +88,7 @@
         <PaginationButton
           :currentPage="state.currentPage"
           :totalPages="state.totalPages"
-          @pageChanged="fetchTransactions($event)"
+          @pageChanged="pageChanged($event)"
         />
       </div>
     </div>
@@ -85,54 +99,86 @@
 import dayjs from "dayjs";
 export default {
   created() {
-    this.fetchTransactions(this.state.currentPage);
+    this.fetchTransactions();
   },
   data() {
     return {
       transactions: [],
+      dataFields: [
+        { name: "Tanggal", value: "txDate" },
+        { name: "Kode Transaksi", value: "txId" },
+        { name: "Gudang", value: "warehouse" },
+        { name: "Jenis", value: "type" },
+        { name: "Status", value: "status" },
+      ],
       state: {
-        limit: parseInt(this.$route.query.limit) || 10,
         totalPages: null,
-        currentPage: parseInt(this.$route.query.page) || 1
+        currentPage: 1,
+      },
+      filter: {
+        search: "",
+        sort: "txDate",
+        sortby: "desc",
+        limit: "10",
+        filter: "",
+        filterVal: "",
       },
     };
   },
   methods: {
-    async fetchTransactions(page) {
-      const queryPage = this.$route.query.page;
+    pageChanged(page) {
+      const query = this.$route.query;
+      this.$router.push({
+        query: {
+          ...query,
+          page,
+        },
+      });
+    },
+    filterChanged(filter) {
+      console.log(filter);
+      this.filter = filter;
+      this.fetchTransactions();
+    },
+    async fetchTransactions() {
+      const page = parseInt(this.$route.query.page) || this.state.currentPage;
       const { data, totalPages } = await this.$axios
-        .$get(`/transaction/?page=${page}&limit=${this.state.limit}`)
-        .then(function(res) {
+        .$get(
+          `/transaction/` +
+            `?page=${page}` +
+            `&limit=${this.filter.limit}` +
+            `&sort=${this.filter.sort}` +
+            `&sortby=${this.filter.sortby}` +
+            `&search=${this.filter.search}` +
+            (this.filter.filter && `&filter[${this.filter.filter}]=${this.filter.filterVal}`)
+        )
+        .then(function (res) {
           return res;
         })
-        .catch(function(err) {
+        .catch(function (err) {
           console.log(err);
           return false;
         });
       if (data) {
-        const payload = data.map(el => ({
+        const payload = data.map((el) => ({
           _id: el._id,
-          txId: el.txId.replace(/(TRX-IN-|TRX-OUT-)/g, ''),
+          txId: el.txId.replace(/(TRX-IN-|TRX-OUT-)/i, ""),
           txDate: dayjs(el.txDate).format("DD/MM/YYYY"),
           warehouse: el.warehouse.name,
           type: el.type,
           status: el.status,
-          description: el.description
+          description: el.description,
         }));
         this.state.currentPage = page;
-        this.state.totalPages ??= totalPages;
+        this.state.totalPages = totalPages;
         this.transactions = [...payload];
-      } else {
       }
-      if (queryPage || page > 1) {
-        this.$router.replace({
-          query: {
-            page,
-            limit: this.state.limit,
-          }
-        });
-      }
-    }
-  }
+    },
+  },
+  watch: {
+    "$route.query.page"() {
+      this.fetchTransactions();
+    },
+  },
 };
 </script>
