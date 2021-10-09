@@ -136,12 +136,12 @@ export default {
       });
     },
     filterChanged(filter) {
-      console.log(filter);
       this.filter = filter;
-      this.fetchTransactions();
+      this.pageChanged();
+      this.fetchTransactions(1);
     },
-    async fetchTransactions() {
-      const page = parseInt(this.$route.query.page) || this.state.currentPage;
+    async fetchTransactions(override) {
+      const page = override || parseInt(this.$route.query.page) || 1;
       const { data, totalPages } = await this.$axios
         .$get(
           `/transaction/` +
