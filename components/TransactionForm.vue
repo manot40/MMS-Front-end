@@ -8,19 +8,19 @@
     <p class="mb-8 text-left font-display antialiased tracking-wider">
       Masuk sebagai: {{ this.$auth.user.name }}
     </p>
-    <div class="flex mb-2 space-x-2 w-1/3 sm:w-full">
-      <div class="form-control flex-1 w-full">
+    <div class="flex mb-2 space-x-4 w-1/3 sm:w-full">
+      <div class="form-control flex-1">
         <label class="label">
           <span class="label-text">Tanggal Transaksi</span>
         </label>
-        <input type="date" v-model="form.txDate" class="input input-bordered" />
+        <input type="date" v-model="form.txDate" class="input input-bordered w-1/4" />
       </div>
-      <div class="form-control flex-1 w-full">
+      <div class="form-control flex-1">
         <label class="label">
           <span class="label-text">Pilih Gudang</span>
         </label>
         <select
-          class="select select-bordered"
+          class="select select-bordered w-full"
           v-model="form.warehouse"
           @change="getItemsData()"
         >
