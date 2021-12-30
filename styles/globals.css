@@ -1,5 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Rubik:wght@300;400;600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap");
+
+@layer base {
+  a:hover {
+    @apply text-black dark:text-white transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .submenu-bar {
+    @apply text-sm block md:flex space-x-4;
+  }
+  .submenu-bar > a {
+    @apply px-2 transition-colors hover:text-black dark:hover:text-white;
+  }
+  .submenu-bar .active {
+    @apply text-black dark:text-white font-semibold;
+  }
+}
