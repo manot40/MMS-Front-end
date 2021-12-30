@@ -8,7 +8,7 @@
     <p class="mb-8 text-left font-display antialiased tracking-wider">
       Masuk sebagai: {{ this.$auth.user.name }}
     </p>
-    <div class="flex mb-2 space-x-4 w-1/3 sm:w-full">
+    <div class="flex mb-2 space-x-4 w-1/2 sm:w-full">
       <div class="form-control flex-1">
         <label class="label">
           <span class="label-text">Tanggal Transaksi</span>
