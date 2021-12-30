@@ -3,26 +3,28 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@nuxtjs/auth-next": "^5.0.0-1624817847.21691f1",
-    "@nuxtjs/axios": "^5.13.6",
-    "@nuxtjs/pwa": "^3.3.5",
-    "core-js": "^3.18.0",
-    "daisyui": "^1.14.1",
+    "axios": "^0.24.0",
     "dayjs": "^1.10.7",
-    "dotenv": "^10.0.0",
-    "litepie-datepicker": "^1.0.14",
-    "nuxt": "^2.15.7",
-    "vue-select": "^3.13.0",
-    "vue-toastification": "^1.7.11"
+    "next": "12.0.7",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-toastify": "^8.1.0",
+    "swr": "^1.1.2"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^4.2.0",
-    "postcss": "^8.3.8"
+    "@types/node": "17.0.5",
+    "@types/react": "17.0.38",
+    "autoprefixer": "^10.4.1",
+    "eslint": "8.5.0",
+    "eslint-config-next": "12.0.7",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.0.8",
+    "typescript": "4.5.4"
   }
 }

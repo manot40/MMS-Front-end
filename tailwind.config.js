@@ -1,55 +1,17 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
-  mode: 'jit',
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    screens: {
-      'sm': {'max': '767px'},
-      'md': {'min': '768px', 'max': '1023px'},
-      'lg': {'min': '1024px', 'max': '1279px'},
-      'xl': {'min': '1280px', 'max': '1535px'},
-      '2xl': {'min': '1536px'},
-    },
-    fontFamily: {
-      display: [
-        'Inter',
-        'ui-sans-serif',
-        'system-ui',
-        '-apple-system',
-        'BlinkMacSystemFont',
-        'Roboto',
-        'Helvetica Neue',
-        'Arial',
-        'Noto Sans',
-        'sans-serif',
-        'Apple Color Emoji',
-        'Segoe UI Emoji',
-        'Segoe UI Symbol',
-        'Noto Color Emoji',
-      ],
-      sans: [
-        'Nunito',
-        'ui-sans-serif',
-        'system-ui',
-        '-apple-system',
-        'BlinkMacSystemFont',
-        'Roboto',
-        'Helvetica Neue',
-        'Arial',
-        'Noto Sans',
-        'sans-serif',
-        'Apple Color Emoji',
-        'Segoe UI Emoji',
-        'Segoe UI Symbol',
-        'Noto Color Emoji',
-      ],
-    },
-    extend: {},
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [
-    require('daisyui'),
+  darkMode: "class",
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
+  theme: {
+    extend: {
+	  fontFamily: {
+		sans: ["Inter", ...defaultTheme.fontFamily.sans],
+	  },
+	},
+  },
+  plugins: [],
 }
