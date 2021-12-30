@@ -13,7 +13,7 @@
         <label class="label">
           <span class="label-text">Tanggal Transaksi</span>
         </label>
-        <input type="date" v-model="form.txDate" class="input input-bordered w-1/4" />
+        <input type="date" v-model="form.txDate" class="input input-bordered w-full" />
       </div>
       <div class="form-control flex-1">
         <label class="label">
