@@ -8,14 +8,14 @@
     <p class="mb-8 text-left font-display antialiased tracking-wider">
       Masuk sebagai: {{ this.$auth.user.name }}
     </p>
-    <div class="flex mb-2 w-1/3 sm:w-full">
-      <div class="form-control w-full mr-4">
+    <div class="flex mb-2 space-x-2 w-1/3 sm:w-full">
+      <div class="form-control flex-1 w-full">
         <label class="label">
           <span class="label-text">Tanggal Transaksi</span>
         </label>
         <input type="date" v-model="form.txDate" class="input input-bordered" />
       </div>
-      <div class="form-control mr-4 w-full">
+      <div class="form-control flex-1 w-full">
         <label class="label">
           <span class="label-text">Pilih Gudang</span>
         </label>

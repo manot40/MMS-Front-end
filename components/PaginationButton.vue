@@ -6,7 +6,7 @@
       class="btn btn-sm"
       @click="pageChanged(1)"
     >
-      {{ currentPage > 3 ? "«" : "1" }}
+      {{ 1 }}
     </button>
     <button
       v-if="totalPages > 5 && currentPage >= 4 && currentPage - 1 > 0"
@@ -35,7 +35,7 @@
       class="btn btn-sm"
       @click="pageChanged(totalPages)"
     >
-      {{ totalPages > (currentPage + 2) ? "»" : totalPages }}
+      {{ totalPages }}
     </button>
   </div>
 </template>
@@ -48,8 +48,14 @@ export default {
   },
   computed: {
     pages() {
+      if (this.totalPages && this.currentPage > this.totalPages)
+        return "NOTHING FOUND";
       if (this.totalPages <= 5) {
-        return this.numbersToArray(this.totalPages);
+        let x = [];
+        for (let i = 0; i < this.totalPages; i++) {
+          x.push(i + 1);
+        }
+        return x;
       } else {
         return this.currentPage > 3
           ? this.currentPage + 1 < this.totalPages
@@ -60,15 +66,6 @@ export default {
     },
   },
   methods: {
-    numbersToArray(num) {
-      let i = 0;
-      let x = [];
-      while (i < num) {
-        i++;
-        x.push(i);
-      }
-      return x;
-    },
     pageChanged(page) {
       if (page !== this.currentPage) this.$emit("pageChanged", page);
     },

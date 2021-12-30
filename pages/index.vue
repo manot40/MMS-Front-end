@@ -10,7 +10,7 @@
               <div class="avatar">
                 <div class="rounded-full w-14 h-14 shadow">
                   <img
-                    src="https://storage.googleapis.com/hybrid-chassis-283717.appspot.com/mms/images/avatar/default.jpg"
+                    src="https://objectstorage.ap-tokyo-1.oraclecloud.com/n/nrmuq2krdm9b/b/bucket-20211017-1905/o/default.jpg"
                     alt=""
                   />
                 </div>
