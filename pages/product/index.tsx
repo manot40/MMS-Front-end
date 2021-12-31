@@ -3,10 +3,10 @@ import { NextPage } from "next/types";
 
 import { Dashboard } from "layout";
 
-const Product: NextPage = () => {
+const Transaction: NextPage = () => {
   return (
     <Dashboard />
   );
 };
 
-export default Product;
+export default Transaction;

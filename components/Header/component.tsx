@@ -1,32 +1,35 @@
 import { Container } from "components";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, HTMLAttributes } from "react";
 
-export const Header: FC = () => {
+type Props = {
+  node?: string,
+  children?: JSX.Element
+};
+
+export const Header: FC<Props> = ({children, node}) => {
   const { pathname } = useRouter();
 
   const route = () => {
     switch(pathname) {
       case "/transaction":
-        return "Transaksi"
+        return "Dasbor Transaksi"
       case "/warehouse":
-        return "Gudang"
+        return "Dasbor Gudang"
       case "/product":
-        return "Produk"
+        return "Dasbor Produk"
+      default:
+        return false
     }
   }
 
   return (
-    pathname !== "/" ? (
+    route() ? (
       <div className="bg-white dark:bg-black border-b border-neutral-300 dark:border-neutral-600">
         <Container>
           <div className="block md:flex items-center justify-between w-auto py-12">
-            <h1 className="text-3xl font-semibold">Dasbor {route()}</h1>
-            <div className="mt-4 md:mt-0">
-              <button className="btn">
-                Tambah Baru
-              </button>
-            </div>
+            <h1 className="text-3xl font-semibold mb-4 md:mb-0">{node || route()}</h1>
+            {children}
           </div>
         </Container>
       </div>

@@ -12,6 +12,12 @@
 }
 
 @layer components {
+  .profile-field {
+    @apply hidden md:flex border border-transparent px-4 py-2 rounded-xl text-sm transition-colors cursor-pointer duration-300
+  }
+  .profile-field:hover {
+    @apply border-neutral-500 text-white
+  }
   .submenu-bar {
     @apply text-sm block md:flex space-x-4;
   }

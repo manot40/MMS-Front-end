@@ -1,5 +1,7 @@
+import { HTMLAttributes } from "react";
 import { FC } from "react";
-import Props from "./props";
+
+type Props = HTMLAttributes<HTMLDivElement>;
 
 export const BaseLayout: FC<Props> = ({ children }) => {
   return (
