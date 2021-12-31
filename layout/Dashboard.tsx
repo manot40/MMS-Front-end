@@ -5,11 +5,7 @@ export const Dashboard: FC = ({children}) => {
   return (
     <div>
       <Navigation />
-      <Header>
-        <button className="btn">
-          Tambah Baru
-        </button>
-      </Header>
+      <Header />
       <Container>
         {children}
       </Container>

@@ -4,7 +4,7 @@ import { FC, HTMLAttributes } from "react";
 
 type Props = {
   node?: string,
-  children?: any
+  children?: JSX.Element
 };
 
 export const Header: FC<Props> = ({children, node}) => {
@@ -24,12 +24,12 @@ export const Header: FC<Props> = ({children, node}) => {
   }
 
   return (
-    route() ? (
+    (node || route()) ? (
       <div className="bg-white dark:bg-black border-b border-neutral-300 dark:border-neutral-600">
         <Container>
           <div className="block md:flex items-center justify-between w-auto py-12">
             <h1 className="text-3xl font-semibold mb-4 md:mb-0">{node || route()}</h1>
-            {children}
+            {node ? children : <button className="btn">Tambah Baru</button>}
           </div>
         </Container>
       </div>
