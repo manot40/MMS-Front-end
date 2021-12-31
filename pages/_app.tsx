@@ -3,14 +3,14 @@ import { ThemeProvider } from 'next-themes'
 
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css'
-import { Layout } from 'components';
+import { BaseLayout } from 'layout';
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark">
-      <Layout>
+      <BaseLayout>
         <Component {...pageProps} />
-      </Layout>
+      </BaseLayout>
     </ThemeProvider>
   )
 }
