@@ -4,7 +4,7 @@ import { FC, HTMLAttributes } from "react";
 
 type Props = {
   node?: string,
-  children?: JSX.Element
+  children?: any
 };
 
 export const Header: FC<Props> = ({children, node}) => {
