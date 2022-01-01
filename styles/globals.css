@@ -6,6 +6,9 @@
 
 
 @layer base {
+  body {
+    @apply bg-neutral-100 dark:bg-neutral-900 text-black dark:text-white
+  }
   a:hover {
     @apply text-black dark:text-white transition-colors duration-300;
   }
@@ -19,7 +22,7 @@
     @apply hidden md:flex border border-transparent px-4 py-2 rounded-xl text-sm transition-colors cursor-pointer duration-300
   }
   .profile-field:hover {
-    @apply border-neutral-500 text-white
+    @apply border-neutral-500 text-black dark:text-white
   }
   .submenu-bar {
     @apply text-sm block md:flex space-x-4;
@@ -31,24 +34,60 @@
     @apply text-black dark:text-white font-semibold;
   }
   .btn {
-    @apply text-white dark:text-black bg-black dark:bg-white px-4 py-2 text-sm font-semibold rounded-lg transition-all
+    @apply text-white dark:text-black bg-black dark:bg-white px-4 py-2 text-sm inline-flex items-center justify-center font-semibold rounded-lg transition-all
   }
   .btn:hover {
-    @apply -translate-y-0.5 shadow-lg shadow-neutral-600
+    @apply -translate-y-0.5 shadow-lg shadow-neutral-600 dark:text-black text-white transition-all duration-300
   }
   .btn:disabled {
-    @apply bg-neutral-600 text-neutral-400 translate-y-0 shadow-none;
+    @apply bg-neutral-600 text-neutral-400 translate-y-0 shadow-none
+  }
+  .btn.loading:before {
+    @apply content-[""] w-5 h-5 rounded-full border-2 animate-spin border-t-transparent border-l-transparent
   }
   .input {
-    @apply px-4 py-3 rounded-xl text-sm bg-black transition-all ease-in-out duration-300
+    @apply px-4 py-3 rounded-xl text-sm bg-white dark:bg-black border dark:border-none disabled:bg-neutral-700 transition-all ease-in-out duration-300
   }
   .input:focus {
     @apply outline-none pl-5 placeholder-transparent placeholder:transition-colors placeholder:duration-300
   }
+  .select {
+    @apply relative cursor-pointer select-none px-4 py-3 rounded-xl text-sm bg-white dark:bg-black border dark:border-none disabled:bg-neutral-700 transition-all ease-in-out duration-300 appearance-none
+  }
+  .select:focus {
+    @apply outline-none 
+  }
+  .options {
+    @apply absolute transition-transform max-h-48 overflow-y-auto duration-300 top-full mt-1 w-full border dark:border-neutral-800 z-10 bg-white dark:bg-black rounded-lg shadow-lg
+  }
+  .options::-webkit-scrollbar {
+    @apply w-2
+  }
+  .options::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 dark:bg-neutral-700 rounded-full
+  }
+  .options>.option {
+    @apply px-4 py-3 text-xs cursor-pointer hover:bg-neutral-200 hover:dark:bg-neutral-700
+  }
+  .options>.selected {
+    @apply dark:bg-neutral-200 bg-neutral-900 dark:text-black text-white
+  }
+  .options>.focused {
+    @apply dark:bg-neutral-500 bg-neutral-100
+  }
+  .options>.disabled {
+    @apply opacity-50 cursor-not-allowed
+  }
   .checkbox {
-    @apply cursor-pointer h-4 w-4 rounded-xl
+    @apply cursor-pointer h-4 w-4 rounded-sm
   }
   .checkbox[checked=true] {
     @apply bg-no-repeat
+  }
+}
+
+@layer utilities {
+  .form-group {
+    @apply flex flex-col
   }
 }

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, memo } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,18 +7,16 @@ import clsx from "clsx";
 import { useHeaderVisible } from "libs/hooks/useHeaderVisible";
 import { Container } from "components";
 
-export const Navigation: FC = () => {
-  const [mounted, setMounted] = useState(false);
+const Component: FC = () => {
+  console.log("rendering Nav");
 
   const { pathname } = useRouter();
   const visible = useHeaderVisible();
 
-  useEffect(() => setMounted(true), []);
-
   return (
     <header
       className={clsx(
-        "relative z-20 w-full border-b border-neutral-400 dark:border-neutral-600 text-neutral-800 dark:text-neutral-400",
+        "relative z-20 w-full border-b border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400",
         visible ? "top-0" : "-top-24"
       )}
     >
@@ -43,13 +41,13 @@ export const Navigation: FC = () => {
               <a className={pathname === "/" ? "active" : ""}>Ringkasan</a>
             </Link>
             <Link href="/warehouse">
-              <a className={pathname === "/warehouse" ? "active" : ""}>Gudang</a>
+              <a className={pathname.match('warehouse') ? "active" : ""}>Gudang</a>
             </Link>
             <Link href="/product">
-              <a className={pathname === "/product" ? "active" : ""}>Produk</a>
+              <a className={pathname.match('product') ? "active" : ""}>Produk</a>
             </Link>
             <Link href="/transaction">
-              <a className={pathname === "/transaction" ? "active" : ""}>Transaksi</a>
+              <a className={pathname.match('transaction') ? "active" : ""}>Transaksi</a>
             </Link>
           </div>
         </div>
@@ -57,3 +55,5 @@ export const Navigation: FC = () => {
     </header>
   );
 };
+
+export const Navigation = memo(Component);

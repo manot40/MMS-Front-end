@@ -1,14 +1,17 @@
-import { Container, Header, Navigation } from "components"
-import { FC } from "react";
+import { Container, Header, Navigation } from "components";
+import { FC, HTMLAttributes, ReactNode } from "react";
 
-export const Dashboard: FC = ({children}) => {
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  Title?: string;
+  HeaderContent?: ReactNode;
+}
+
+export const Dashboard: FC<Props> = ({ children, className, Title, HeaderContent }) => {
   return (
     <div>
       <Navigation />
-      <Header />
-      <Container>
-        {children}
-      </Container>
+      <Header node={Title}>{HeaderContent}</Header>
+      <Container className={className}>{children}</Container>
     </div>
   );
-}
+};
