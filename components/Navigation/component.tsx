@@ -21,7 +21,7 @@ const Component: FC = () => {
   }, [setTheme, theme]);
 
   return (
-    <header className="header-wrapper -top-[3.9rem] md:-top-20">
+    <header className="header-wrapper -top-[4.35rem] md:-top-20">
       <div className="absolute flex -z-10 w-full h-full opacity-80 bg-white dark:bg-black" />
       <Container className="flex items-center justify-between w-auto py-4">
         <Link passHref href="/">
