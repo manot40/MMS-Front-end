@@ -105,7 +105,7 @@ const NewTransaction: NextPage = () => {
           <Button onClick={addRow}>Tambah Baris</Button>
         </div>
         <div className={clsx(width < 768 && "overflow-x-auto")}>
-          <table className="table-parent">
+          <table className="table-parent" style={{borderSpacing: 0}}>
             <thead>
               <tr>
                 <th>Nama Barang</th>
@@ -136,6 +136,7 @@ const NewTransaction: NextPage = () => {
                       label=""
                       type="number"
                       placeholder="Jumlah Barang"
+                      parentClass="w-24 md:w-auto"
                       value={obj.quantity}
                       onChange={(val) => onQuantityChanged(val, idx)}
                     />

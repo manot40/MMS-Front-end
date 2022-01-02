@@ -100,14 +100,7 @@ const Component: FC<Props> = ({
       : [...options];
 
     if (!list.length)
-      return (
-        <div
-          className="option disabled"
-          onClick={() => (setIsFocus(false), setIsOpen(false))}
-        >
-          Tidak ada data
-        </div>
-      );
+      return <div className="option disabled">Tidak ada data</div>;
     return list.map((opt, idx) => {
       return (
         <div
@@ -132,6 +125,16 @@ const Component: FC<Props> = ({
         <div className="select-wrapper">
           <div className="dark:bg-black bg-neutral-800 opacity-80 w-full h-full" />
           <h1>{placeholder}</h1>
+          <div
+            className="md:hidden cursor-pointer absolute text-white text-2xl font-semibold top-[16vw] right-[5.5vw] mt-0.5"
+            onClick={() => (setIsFocus(false), setIsOpen(false))}
+          >
+            {/** @ts-ignore */}
+            <ion-icon
+              name="close"
+              size="large"
+            />
+          </div>
         </div>
       )}
       <label className="text-xs ml-1 mb-2">{label}</label>
@@ -159,9 +162,9 @@ const Component: FC<Props> = ({
               label=""
               value={search}
               placeholder="Cari entri"
-              parentClass="border-b border-neutral-300 dark:border-neutral-800"
+              parentClass="border-b border-neutral-300 dark:border-neutral-700"
               className={clsx(
-                "rounded-none bg-transparent",
+                "rounded-none border-none bg-transparent",
                 !isOpen && "transition-none"
               )}
             />
