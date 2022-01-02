@@ -28,7 +28,7 @@ export const Header: FC<Props> = ({children, node}) => {
       <div className="bg-white dark:bg-black border-b border-neutral-300 dark:border-neutral-600">
         <Container>
           <div className="block md:flex items-center justify-between w-auto py-12">
-            <h1 className={clsx("text-3xl font-semibold md:mb-0", children && "mb-4")}>{node || route()}</h1>
+            <h1 className={clsx("text-3xl font-bold md:mb-0", children && "mb-4")}>{node || route()}</h1>
             {children}
           </div>
         </Container>

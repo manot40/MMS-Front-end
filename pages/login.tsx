@@ -20,13 +20,13 @@ const Home: NextPage = () => {
             label="Email"
             placeholder="john@doe.com"
             type="email"
-            className="mb-4"
+            className="mb-4 text-sm"
           />
           <Input
             label="Password"
             placeholder="********"
             type="password"
-            className="mb-4"
+            className="mb-4 text-sm"
           />
           <div className="flex ml-1 mb-8">
             <input

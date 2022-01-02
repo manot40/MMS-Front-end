@@ -8,7 +8,7 @@ import '../styles/globals.css'
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="white">
+    <ThemeProvider attribute="class" enableSystem>
       <Head>
         <title>MMS Frontend - Next (Dev)</title>
       </Head>

@@ -1,89 +1,122 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import clsx from "clsx";
 import { Input } from "components";
-import { FC, useCallback, useState } from "react";
+import { filterArray, prettyString } from "libs/utils";
+import { FC, useCallback, useState, useEffect, memo } from "react";
 import { Chevron } from "./Chevron";
 
-type Option = {id?: string | number, value: string};
+type POJO = {[key: string]: any};
 
 interface Props {
-  options: Option[];
+  label?: string;
+  placeholder: string;
+  options: POJO[];
+  value?: string | string[];
+  id?: string | number;
   multiple?: boolean;
-  useSearch?: boolean;
-  label: string;
-  placeholder?: string;
-  onChange?: (value: Option | Option[]) => void;
+  searchable?: boolean;
+  required?: boolean;
+  onChange?: (value: POJO | POJO[]) => void;
   parentClass?: string;
   className?: string;
 }
 
-export const Select: FC<Props> = ({
-  options,
-  multiple,
-  useSearch,
-  label,
+const Component: FC<Props> = ({
+  label = "",
   placeholder = "Pilih item",
+  options,
+  value,
+  id = "id",
+  multiple,
+  searchable,
+  required,
   onChange,
   parentClass,
   className,
 }) => {
-  console.log("Render");
-  const [values, setValues] = useState<Option[]>([]);
+  function getValue(): POJO[] {
+    if (typeof value === "string") {
+      const target = options.find((option) => option[id] === value)
+      return target ? [target] : [];
+    }
+    return value ? options.filter((option) => value.includes(option[id])) : [];
+  }
+  const [values, setValues] = useState<POJO[]>(getValue());
   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [isFocus, setIsFocus] = useState(false);
+
+  useEffect(() => {
+    if (onChange) {
+      const toObj = values.map((value) => ({ ...value }));
+      multiple ? onChange(toObj) : onChange(toObj[0]);
+    }
+  }, [values])
 
   const onClick = useCallback(() => {
     setIsOpen(!isOpen);
   }, [isOpen]);
 
+  const onBlur = useCallback(() => {
+    !isFocus && setIsOpen(false);
+  }, [isFocus]);
+
   const onOptionClick = useCallback((e) => {
-    const { id, value } = e.currentTarget.dataset;
+    const obj = e.currentTarget.dataset;
     if (!multiple) {
-      setValues([{ id, value }]);
+      setValues([obj]);
       setIsOpen(false);
-      onChange && onChange({ id, value });
+      setIsFocus(false);
     } else {
       console.log("Multiple");
     }
-  }, [multiple, onChange]);
-
-  const onKeyDown = useCallback(() => {
-    console.log("onKeyDown");
-  }, []);
+  }, [multiple]);
 
   const renderValues = () => {
-    if (values.length === 0) {
-      return <div className="text-xs">{placeholder}</div>;
+    if (values[0] && values[0][id]) {
+      return <div className="text-xs">{prettyString(values[0].value)}</div>;
     }
-    return <div className="text-xs">{values[0].value}</div>;
+    return <div className="text-xs text-neutral-400">{placeholder}</div>;
   };
 
-  const renderOptions = () => {
-    if (!options.length)
+  const renderOptions = useCallback(() => {
+    const list = searchable
+      ? [...filterArray(options, "value", search)]
+      : [...options];
+
+    if (!list.length)
       return <div className="option disabled">Tidak ada data</div>;
-    return options.map((opt, idx) => {
+    return list.map((opt, idx) => {
       return (
         <div
-          key={opt.id || idx}
+          key={opt[id] || idx}
           data-value={opt.value}
-          data-id={opt.id}
+          data-id={opt[id]}
           onClick={onOptionClick}
           className={clsx(
             "option",
             values.find(val => val.value === opt.value) && "selected")
           }
         >
-          {opt.value}
+          {prettyString(opt.value)}
         </div>
       );
     });
-  }
+  }, [search, values]);
 
   return (
-    <div className={"form-group w-full " + parentClass}>
+    <div className={"form-group min-w-content " + parentClass}>
+      {isOpen && (
+        <div className="select-wrapper">
+          <div className="dark:bg-black bg-neutral-800 opacity-80 w-full h-full" />
+          <h1>{placeholder}</h1>
+        </div>
+      )}
       <label className="text-xs ml-1 mb-2">{label}</label>
-      <div className="flex relative items-center max-w-fit">
+      <div className="flex md:relative items-center">
         <div
-          onKeyDown={onKeyDown}
           onClick={onClick}
+          onBlur={onBlur}
           tabIndex={0}
           className={"select " + className}
         >
@@ -92,12 +125,20 @@ export const Select: FC<Props> = ({
             {!isOpen && <Chevron />}
           </span>
         </div>
-        <div className={clsx("options", !isOpen && "-translate-y-2 invisible")}>
-          {(options.length && useSearch) ? (
+        <div
+          className={clsx("options", !isOpen && "-translate-y-2 invisible")}
+          onMouseEnter={() => setIsFocus(true)}
+          onMouseLeave={() => setIsFocus(false)}
+        >
+          {(options.length && searchable) ? (
             <Input
-              placeholder="Cari entri..."
+              // @ts-ignore
+              onChange={setSearch}
+              label=""
+              value={search}
+              placeholder="Cari entri"
               parentClass="border-b border-neutral-300 dark:border-neutral-800"
-              className="text-xs rounded-none"
+              className={clsx("rounded-none bg-transparent", !isOpen && "transition-none")}
             />
           ) : null}
           {renderOptions()}
@@ -106,3 +147,5 @@ export const Select: FC<Props> = ({
     </div>
   );
 };
+
+export const Select = memo(Component);

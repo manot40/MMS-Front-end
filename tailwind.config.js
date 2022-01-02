@@ -12,6 +12,12 @@ module.exports = {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
         display: ["Rubik", ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        "danger": "#dc2626",
+        "success": "#16a34a",
+        "info": "#1976d2",
+        "warning": "#fbbf24",
+      }
     },
   },
   plugins: [],

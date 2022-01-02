@@ -36,6 +36,12 @@
   .btn {
     @apply text-white dark:text-black bg-black dark:bg-white px-4 py-2 text-sm inline-flex items-center justify-center font-semibold rounded-lg transition-all
   }
+  .btn.danger {
+    @apply bg-danger dark:bg-danger text-white hover:shadow-red-600 hover:dark:text-white
+  }
+  .btn.info {
+    @apply bg-info dark:bg-info text-white hover:shadow-[#01579b] hover:dark:text-white
+  }
   .btn:hover {
     @apply -translate-y-0.5 shadow-lg shadow-neutral-600 dark:text-black text-white transition-all duration-300
   }
@@ -46,19 +52,29 @@
     @apply content-[""] w-5 h-5 rounded-full border-2 animate-spin border-t-transparent border-l-transparent
   }
   .input {
-    @apply px-4 py-3 rounded-xl text-sm bg-white dark:bg-black border dark:border-none disabled:bg-neutral-700 transition-all ease-in-out duration-300
+    @apply px-4 py-3 rounded-xl text-xs bg-white dark:bg-black border dark:border-none disabled:bg-neutral-700 transition-all ease-in-out duration-300
   }
   .input:focus {
     @apply outline-none pl-5 placeholder-transparent placeholder:transition-colors placeholder:duration-300
   }
+  .input[type="number"] {
+    @apply appearance-none
+  }
   .select {
-    @apply relative cursor-pointer select-none px-4 py-3 rounded-xl text-sm bg-white dark:bg-black border dark:border-none disabled:bg-neutral-700 transition-all ease-in-out duration-300 appearance-none
+    @apply cursor-pointer select-none pl-4 pr-8 py-3 rounded-xl text-sm bg-white dark:bg-black border dark:border-none disabled:bg-neutral-700 transition-all ease-in-out duration-300 appearance-none
   }
   .select:focus {
     @apply outline-none 
   }
+  .select-wrapper {
+    @apply fixed md:hidden top-0 left-0 w-screen h-screen z-20 backdrop-blur-md
+  }
+  .select-wrapper>h1 {
+    @apply absolute text-white text-2xl font-semibold top-[16vw] left-[5vw] ml-2
+  }
   .options {
-    @apply absolute transition-transform max-h-48 overflow-y-auto duration-300 top-full mt-1 w-full border dark:border-neutral-800 z-10 bg-white dark:bg-black rounded-lg shadow-lg
+    @apply md:absolute md:top-full md:w-full md:left-auto md:right-auto md:max-h-48 transition-transform overflow-auto duration-300 mt-1 border dark:border-neutral-800 bg-white dark:bg-black z-30 rounded-lg shadow-lg
+    fixed top-[25vw] left-[5vw] w-[90vw] max-h-[65vh];
   }
   .options::-webkit-scrollbar {
     @apply w-2
@@ -67,10 +83,10 @@
     @apply bg-neutral-300 dark:bg-neutral-700 rounded-full
   }
   .options>.option {
-    @apply px-4 py-3 text-xs cursor-pointer hover:bg-neutral-200 hover:dark:bg-neutral-700
+    @apply px-4 py-3 select-none text-xs cursor-pointer hover:bg-neutral-200 hover:dark:bg-neutral-700
   }
   .options>.selected {
-    @apply dark:bg-neutral-200 bg-neutral-900 dark:text-black text-white
+    @apply dark:bg-neutral-200 bg-neutral-800 dark:text-black text-white hover:bg-black hover:dark:bg-white
   }
   .options>.focused {
     @apply dark:bg-neutral-500 bg-neutral-100
@@ -83,6 +99,30 @@
   }
   .checkbox[checked=true] {
     @apply bg-no-repeat
+  }
+  .table-parent {
+    @apply table w-full border-collapse text-xs
+  }
+  .table-parent td {
+    @apply p-4 border-b border-neutral-300 dark:border-neutral-700
+  }
+  .table-parent>tbody:last-child {
+    @apply border-b-0
+  }
+  .table-parent th {
+    @apply p-4
+  }
+  .table-parent>thead>tr>th, .table-parent>tfoot>tr>th {
+    @apply text-left select-none font-semibold bg-white dark:bg-black text-neutral-600 dark:text-neutral-400
+  }
+  .table-parent>thead>tr>th:first-child, .table-parent>tfoot>tr>th:first-child {
+    @apply rounded-l-lg
+  }
+  .table-parent>thead>tr>th:last-child, .table-parent>tfoot>tr>th:last-child {
+    @apply rounded-r-lg
+  }
+  .table-parent>tbody>tr>td {
+    @apply text-sm
   }
 }
 
