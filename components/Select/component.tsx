@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import clsx from "clsx";
 import { Input } from "components";
+import { useWindowSize } from "libs/hooks/useWindowSize";
 import { filterArray, prettyString } from "libs/utils";
 import { FC, useCallback, useState, useEffect, memo } from "react";
 import { Chevron } from "./Chevron";
 
-type POJO = {[key: string]: any};
+type POJO = { [key: string]: any };
 
 interface Props {
   label?: string;
@@ -34,43 +35,57 @@ const Component: FC<Props> = ({
   parentClass,
   className,
 }) => {
-  function getValue(): POJO[] {
-    if (typeof value === "string") {
-      const target = options.find((option) => option[id] === value)
-      return target ? [target] : [];
-    }
-    return value ? options.filter((option) => value.includes(option[id])) : [];
-  }
   const [values, setValues] = useState<POJO[]>(getValue());
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [isFocus, setIsFocus] = useState(false);
+
+  const { width } = useWindowSize();
+
+  function getValue(): POJO[] {
+    if (typeof value === "string") {
+      const target = options.find((option) => option[id] === value);
+      return target ? [target] : [];
+    }
+    return value ? options.filter((option) => value.includes(option[id])) : [];
+  }
 
   useEffect(() => {
     if (onChange) {
       const toObj = values.map((value) => ({ ...value }));
       multiple ? onChange(toObj) : onChange(toObj[0]);
     }
-  }, [values])
+  }, [values]);
 
   const onClick = useCallback(() => {
+    if (width < 768) {
+      const body = document.querySelector("html");
+      if (body) body.style.overflow = "hidden";
+    }
     setIsOpen(!isOpen);
   }, [isOpen]);
 
   const onBlur = useCallback(() => {
+    if (width < 768) {
+      const body = document.querySelector("html");
+      if (body) body.style.overflow = "auto";
+    }
     !isFocus && setIsOpen(false);
   }, [isFocus]);
 
-  const onOptionClick = useCallback((e) => {
-    const obj = e.currentTarget.dataset;
-    if (!multiple) {
-      setValues([obj]);
-      setIsOpen(false);
-      setIsFocus(false);
-    } else {
-      console.log("Multiple");
-    }
-  }, [multiple]);
+  const onOptionClick = useCallback(
+    (e) => {
+      const obj = e.currentTarget.dataset;
+      if (!multiple) {
+        setValues([obj]);
+        setIsOpen(false);
+        setIsFocus(false);
+      } else {
+        console.log("Multiple");
+      }
+    },
+    [multiple]
+  );
 
   const renderValues = () => {
     if (values[0] && values[0][id]) {
@@ -85,7 +100,14 @@ const Component: FC<Props> = ({
       : [...options];
 
     if (!list.length)
-      return <div className="option disabled">Tidak ada data</div>;
+      return (
+        <div
+          className="option disabled"
+          onClick={() => (setIsFocus(false), setIsOpen(false))}
+        >
+          Tidak ada data
+        </div>
+      );
     return list.map((opt, idx) => {
       return (
         <div
@@ -95,8 +117,8 @@ const Component: FC<Props> = ({
           onClick={onOptionClick}
           className={clsx(
             "option",
-            values.find(val => val.value === opt.value) && "selected")
-          }
+            values.find((val) => val.value === opt.value) && "selected"
+          )}
         >
           {prettyString(opt.value)}
         </div>
@@ -130,7 +152,7 @@ const Component: FC<Props> = ({
           onMouseEnter={() => setIsFocus(true)}
           onMouseLeave={() => setIsFocus(false)}
         >
-          {(options.length && searchable) ? (
+          {options.length && searchable ? (
             <Input
               // @ts-ignore
               onChange={setSearch}
@@ -138,7 +160,10 @@ const Component: FC<Props> = ({
               value={search}
               placeholder="Cari entri"
               parentClass="border-b border-neutral-300 dark:border-neutral-800"
-              className={clsx("rounded-none bg-transparent", !isOpen && "transition-none")}
+              className={clsx(
+                "rounded-none bg-transparent",
+                !isOpen && "transition-none"
+              )}
             />
           ) : null}
           {renderOptions()}

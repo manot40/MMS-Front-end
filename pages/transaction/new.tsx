@@ -100,7 +100,7 @@ const NewTransaction: NextPage = () => {
         />
       </div>
       <div>
-        <div className="flex justify-between text-2xl font-semibold mb-4">
+        <div className="sticky flex justify-between text-2xl font-semibold mb-4">
           <h1>Daftar Barang</h1>
           <Button onClick={addRow}>Tambah Baris</Button>
         </div>
