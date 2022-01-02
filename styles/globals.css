@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.dashboard-wrap {
+  min-height: calc(100vh - 20.95rem);
+}
+@media screen and (max-width: 768px) {
+  .dashboard-wrap {
+    min-height: calc(100vh - 18rem);
+  }
+}
 
 @layer base {
   body {
@@ -27,13 +35,13 @@
   .profile-field:hover {
     @apply border-neutral-500 text-black dark:text-white
   }
-  .submenu-bar {
+  .sub-menubar {
     @apply text-sm block md:flex space-x-4;
   }
-  .submenu-bar > a {
+  .sub-menubar > a {
     @apply px-2 transition-colors hover:text-black dark:hover:text-white;
   }
-  .submenu-bar .active {
+  .sub-menubar .active {
     @apply text-black dark:text-white font-semibold;
   }
   .btn {

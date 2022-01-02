@@ -58,7 +58,7 @@ const Component: FC<Props> = ({
   }, [values]);
 
   const onClick = useCallback(() => {
-    if (width < 768) {
+    if (width < 768 && width !== 0) {
       const body = document.querySelector("html");
       if (body) body.style.overflow = "hidden";
     }
@@ -66,7 +66,7 @@ const Component: FC<Props> = ({
   }, [isOpen]);
 
   const onBlur = useCallback(() => {
-    if (width < 768) {
+    if (width < 768 && width !== 0) {
       const body = document.querySelector("html");
       if (body) body.style.overflow = "auto";
     }
