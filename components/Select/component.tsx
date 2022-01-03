@@ -85,7 +85,10 @@ const Component: FC<Props> = ({
 
   const renderChosen = () => {
     if (chosen[0]) {
-      return <div className="text-xs">{prettyString(chosen[0][labelKey])}</div>;
+      const result = multiple
+        ? chosen.map((val, i) => <div key={i.toString()} className="badge">{val[labelKey]}</div>)
+        : chosen[0][labelKey];
+      return <div className="text-xs">result</div>;
     }
     return <div className="text-xs text-neutral-400">{placeholder}</div>;
   };
