@@ -19,6 +19,8 @@ interface Props {
   required?: boolean;
   onChange?: (value: string | string[]) => void;
   parentClass?: string;
+  variant?: "default" | "outline" | "flat";
+  colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
   className?: string;
 }
 
@@ -33,6 +35,8 @@ const Component: FC<Props> = ({
   required,
   onChange,
   parentClass,
+  variant = "default",
+  colorScheme = "primary",
   className,
 }) => {
   const [values, setValues] = useState<POJO[]>(setDefault());
@@ -137,8 +141,8 @@ const Component: FC<Props> = ({
           className={"select " + className}
         >
           {renderValues()}
-          <span className="inline-flex absolute text-neutral-500 right-2 top-3 bg-white dark:bg-black">
-            {!isOpen && <Chevron />}
+          <span className={clsx(isOpen ? "rotate-180" : "transform-none")}>
+            <Chevron />
           </span>
         </div>
         <div

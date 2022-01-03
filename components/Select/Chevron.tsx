@@ -1,6 +1,6 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 
-export const Chevron: FC = () => {
+const Component: FC = () => {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -18,3 +18,5 @@ export const Chevron: FC = () => {
     </svg>
   );
 };
+
+export const Chevron = memo(Component);

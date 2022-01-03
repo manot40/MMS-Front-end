@@ -1,4 +1,6 @@
-export const Footer = () => {
+import { FC, memo } from "react";
+
+const Component: FC = () => {
   return (
     <footer className="bg-white dark:bg-black w-full border-t dark:border-neutral-600 text-neutral-100 text-center py-4">
       <div className="inline-flex text-black dark:text-white">
@@ -9,3 +11,5 @@ export const Footer = () => {
     </footer>
   );
 };
+
+export const Footer = memo(Component);

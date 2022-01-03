@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, memo } from "react";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   type?: string;
@@ -6,16 +6,20 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   value?: string | number;
   disabled?: boolean;
   parentClass?: string;
+  variant?: "default" | "outline" | "flat";
+  colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
   onChange?: (e: any) => void;
 }
 
-export const Input: FC<Props> = ({
+const Component: FC<Props> = ({
   label,
   placeholder,
   type,
   disabled,
   value,
   parentClass,
+  variant = "default",
+  colorScheme = "primary",
   className,
   onChange,
 }) => {
@@ -33,3 +37,5 @@ export const Input: FC<Props> = ({
     </div>
   );
 };
+
+export const Input = memo(Component);
