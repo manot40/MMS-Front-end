@@ -81,7 +81,7 @@
     @apply fixed md:hidden top-0 left-0 w-screen h-screen z-20 backdrop-blur-md
   }
   .select-wrapper>h1 {
-    @apply absolute text-white text-2xl font-semibold top-[16vw] left-[5vw] ml-2
+    @apply fixed text-white text-2xl font-semibold top-[16vw] left-[5vw] ml-2
   }
   .options {
     @apply md:absolute md:top-full md:w-full md:left-auto md:right-auto md:max-h-48 transition-transform overflow-auto duration-300 mt-1 border dark:border-neutral-700 bg-white dark:bg-black z-30 rounded-lg shadow-lg
@@ -127,13 +127,13 @@
     @apply text-left select-none font-semibold bg-white dark:bg-black text-neutral-600 dark:text-neutral-400
   }
   .table-parent>thead>tr>th:first-child, .table-parent>tfoot>tr>th:first-child {
-    @apply rounded-l-lg border-l dark:border-neutral-700
+    @apply rounded-l-lg border-l dark:border-neutral-800
   }
   .table-parent>thead>tr>th, .table-parent>tfoot>tr>th {
-    @apply border-t border-b dark:border-neutral-700
+    @apply border-t border-b dark:border-neutral-800
   }
   .table-parent>thead>tr>th:last-child, .table-parent>tfoot>tr>th:last-child {
-    @apply rounded-r-lg border-r dark:border-neutral-700
+    @apply rounded-r-lg border-r dark:border-neutral-800
   }
   .table-parent>tbody>tr>td {
     @apply text-sm

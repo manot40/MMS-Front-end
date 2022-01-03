@@ -21,12 +21,16 @@ const options = [
 const NewTransaction: NextPage = () => {
   const { width } = useWindowSize();
   const [tableData, setTableData] = useState([{ item: "", quantity: 0 }]);
+  const [warehouse, setWarehouse] = useState("");
+  const [desc, setDesc] = useState("");
+  const [date, setDate] = useState("");
+  const [type, setType] = useState("");
 
-  const itemChanged = useCallback(
+  const itemChanged = useCallback<(val: string, idx: number) => void>(
     (val, idx) => {
       if (val) {
         const newData = [...tableData];
-        newData[idx] = { item: val.id, quantity: newData[idx].quantity };
+        newData[idx] = { item: val, quantity: newData[idx].quantity };
         setTableData(newData);
       }
     },
@@ -67,36 +71,44 @@ const NewTransaction: NextPage = () => {
           )}
         >
           <Input
+            value={date}
             label="Tanggal Transaksi"
             type="date"
             placeholder="Pilih Tanggal"
             className="w-40"
+            onChange={(val) => setDate(val)}
           />
           <Select
+            value={type}
             label="Transaksi"
             placeholder="Pilih Transaksi"
             className="w-36"
+            required
             options={[
               { id: "out", value: "Keluar" },
               { id: "in", value: "Masuk" },
             ]}
-            required
+            onChange={(val) => setType(val as string)}
           />
           <Select
+            value={warehouse}
             label="Gudang"
             placeholder="Pilih Gudang"
             className="w-44"
+            required
             options={[
               { id: "1", value: "Gudang SOS" },
               { id: "2", value: "Gudang Virtus" },
             ]}
-            required
+            onChange={(val) => setWarehouse(val as string)}
           />
         </div>
         <Input
+          value={desc}
           label="Keterangan"
           placeholder="Input Keterangan"
           className="w-full md:w-64"
+          onChange={(val) => setDesc(val)}
         />
       </div>
       <div>
@@ -125,7 +137,7 @@ const NewTransaction: NextPage = () => {
                       className="w-full"
                       value={obj.item}
                       options={options}
-                      onChange={(val) => itemChanged(val, idx)}
+                      onChange={(val) => itemChanged(val as string, idx)}
                     />
                   </td>
                   <td>

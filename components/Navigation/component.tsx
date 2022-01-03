@@ -43,7 +43,7 @@ const Component: FC = () => {
           />
         </div>
       </Container>
-      <Container className={clsx("flex items-center justify-between w-auto py-4", width < 480 && "overflow-x-auto")}>
+      <Container className={clsx("flex items-center justify-between w-auto py-2", width < 480 && "overflow-x-auto")}>
         <div className="flex items-center">
           <div className="sub-menubar">
             <Link href="/">

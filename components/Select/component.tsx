@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import clsx from "clsx";
 import { Input } from "components";
-import { useWindowSize } from "libs/hooks/useWindowSize";
+import { Chevron } from "./Chevron";
 import { filterArray, prettyString } from "libs/utils";
 import { FC, useCallback, useState, useEffect, memo } from "react";
-import { Chevron } from "./Chevron";
 
 type POJO = { [key: string]: any };
+type TRequired<T extends boolean> = T extends true ? string[] : string;
 
 interface Props {
   label?: string;
@@ -17,7 +17,7 @@ interface Props {
   multiple?: boolean;
   searchable?: boolean;
   required?: boolean;
-  onChange?: (value: POJO | POJO[]) => void;
+  onChange?: (value: string | string[]) => void;
   parentClass?: string;
   className?: string;
 }
@@ -35,41 +35,32 @@ const Component: FC<Props> = ({
   parentClass,
   className,
 }) => {
-  const [values, setValues] = useState<POJO[]>(getValue());
+  const [values, setValues] = useState<POJO[]>(setDefault());
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [isFocus, setIsFocus] = useState(false);
 
-  const { width } = useWindowSize();
-
-  function getValue(): POJO[] {
+  function setDefault(): POJO[] {
+    const defaults = required && options[0] ? [options[0]] : [];
     if (typeof value === "string") {
       const target = options.find((option) => option[id] === value);
-      return target ? [target] : [];
+      return target ? [target] : defaults;
     }
-    return value ? options.filter((option) => value.includes(option[id])) : [];
+    return value ? options.filter((option) => value.includes(option[id])) : defaults;
   }
 
   useEffect(() => {
     if (onChange) {
-      const toObj = values.map((value) => ({ ...value }));
+      const toObj: string[] = values.map((value) => value[id].toString());
       multiple ? onChange(toObj) : onChange(toObj[0]);
     }
   }, [values]);
 
   const onClick = useCallback(() => {
-    if (width < 768 && width !== 0) {
-      const body = document.querySelector("html");
-      if (body) body.style.overflow = "hidden";
-    }
     setIsOpen(!isOpen);
   }, [isOpen]);
 
   const onBlur = useCallback(() => {
-    if (width < 768 && width !== 0) {
-      const body = document.querySelector("html");
-      if (body) body.style.overflow = "auto";
-    }
     !isFocus && setIsOpen(false);
   }, [isFocus]);
 
@@ -126,7 +117,7 @@ const Component: FC<Props> = ({
           <div className="dark:bg-black bg-neutral-800 opacity-80 w-full h-full" />
           <h1>{placeholder}</h1>
           <div
-            className="md:hidden cursor-pointer absolute text-white text-2xl font-semibold top-[16vw] right-[5.5vw] mt-0.5"
+            className="md:hidden cursor-pointer fixed text-white text-2xl font-semibold top-[16vw] right-[5.5vw] mt-0.5"
             onClick={() => (setIsFocus(false), setIsOpen(false))}
           >
             {/** @ts-ignore */}
@@ -138,7 +129,7 @@ const Component: FC<Props> = ({
         </div>
       )}
       <label className="text-xs ml-1 mb-2">{label}</label>
-      <div className="flex md:relative items-center">
+      <div className="flex relative items-center">
         <div
           onClick={onClick}
           onBlur={onBlur}
