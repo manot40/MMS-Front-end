@@ -5,60 +5,60 @@ import { Chevron } from "./Chevron";
 import { filterArray, prettyString } from "libs/utils";
 import { FC, useCallback, useState, useEffect, memo } from "react";
 
-type POJO = { [key: string]: any };
-type TRequired<T extends boolean> = T extends true ? string[] : string;
+type Option = { [key: string]: string };
 
 interface Props {
-  label?: string;
+  labelHtml?: string;
   placeholder: string;
-  options: POJO[];
-  value?: string | string[];
-  id?: string | number;
+  idKey?: string;
+  labelKey?: string;
   multiple?: boolean;
-  searchable?: boolean;
-  required?: boolean;
-  onChange?: (value: string | string[]) => void;
-  parentClass?: string;
   variant?: "default" | "outline" | "flat";
   colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
   className?: string;
+  options: Option[];
+  value?: string | string[];
+  searchable?: boolean;
+  required?: boolean;
+  onChange?: (value: string | string[]) => void;
 }
 
 const Component: FC<Props> = ({
-  label = "",
+  labelHtml = "",
   placeholder = "Pilih item",
-  options,
-  value,
-  id = "id",
-  multiple,
-  searchable,
-  required,
-  onChange,
-  parentClass,
+  idKey = "id",
+  labelKey = "label",
+  multiple = false,
   variant = "default",
   colorScheme = "primary",
   className,
+  options,
+  value,
+  searchable,
+  required,
+  onChange
 }) => {
-  const [values, setValues] = useState<POJO[]>(setDefault());
+  const [chosen, setChosen] = useState<Option[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [isFocus, setIsFocus] = useState(false);
 
-  function setDefault(): POJO[] {
-    const defaults = required && options[0] ? [options[0]] : [];
-    if (typeof value === "string") {
-      const target = options.find((option) => option[id] === value);
-      return target ? [target] : defaults;
+  useEffect(() => {
+    const def = required && options[0] ? [options[0]] : [];
+    if (!Array.isArray(value)) {
+      const target = options.find((option) => option[idKey] === value);
+      setChosen(target ? [target] : def);
+    } else {
+      setChosen(value ? options.filter((option) => value.includes(option[idKey])) : def);
     }
-    return value ? options.filter((option) => value.includes(option[id])) : defaults;
-  }
+  }, [value])
 
   useEffect(() => {
     if (onChange) {
-      const toObj: string[] = values.map((value) => value[id].toString());
+      const toObj: string[] = chosen.map((value) => value[idKey].toString());
       multiple ? onChange(toObj) : onChange(toObj[0]);
     }
-  }, [values]);
+  }, [chosen]);
 
   const onClick = useCallback(() => {
     setIsOpen(!isOpen);
@@ -70,9 +70,10 @@ const Component: FC<Props> = ({
 
   const onOptionClick = useCallback(
     (e) => {
-      const obj = e.currentTarget.dataset;
+      const { id, label } = e.currentTarget.dataset;
+      const obj = { [idKey]: id, [labelKey]: label }
       if (!multiple) {
-        setValues([obj]);
+        setChosen([obj]);
         setIsOpen(false);
         setIsFocus(false);
       } else {
@@ -82,40 +83,40 @@ const Component: FC<Props> = ({
     [multiple]
   );
 
-  const renderValues = () => {
-    if (values[0] && values[0][id]) {
-      return <div className="text-xs">{prettyString(values[0].value)}</div>;
+  const renderChosen = () => {
+    if (chosen[0]) {
+      return <div className="text-xs">{prettyString(chosen[0][labelKey])}</div>;
     }
     return <div className="text-xs text-neutral-400">{placeholder}</div>;
   };
 
   const renderOptions = useCallback(() => {
     const list = searchable
-      ? [...filterArray(options, "value", search)]
+      ? [...filterArray(options, labelKey, search)]
       : [...options];
 
     if (!list.length)
       return <div className="option disabled">Tidak ada data</div>;
-    return list.map((opt, idx) => {
+    return list.map((option, idx) => {
       return (
         <div
-          key={opt[id] || idx}
-          data-value={opt.value}
-          data-id={opt[id]}
+          key={option[idKey] || idx}
+          data-id={option[idKey]}
+          data-label={option[labelKey]}
           onClick={onOptionClick}
           className={clsx(
             "option",
-            values.find((val) => val.value === opt.value) && "selected"
+            chosen.find((val) => val[labelKey] === option[labelKey]) && "selected"
           )}
         >
-          {prettyString(opt.value)}
+          {prettyString(option[labelKey])}
         </div>
       );
     });
-  }, [search, values]);
+  }, [search, chosen]);
 
   return (
-    <div className={"form-group min-w-content " + parentClass}>
+    <div className={clsx("form-group min-w-content", className)}>
       {isOpen && (
         <div className="select-wrapper">
           <div className="dark:bg-black bg-neutral-800 opacity-80 w-full h-full" />
@@ -132,15 +133,15 @@ const Component: FC<Props> = ({
           </div>
         </div>
       )}
-      <label className="text-xs ml-1 mb-2">{label}</label>
+      <label className="text-xs ml-1 mb-2">{labelHtml}</label>
       <div className="flex relative items-center">
         <div
           onClick={onClick}
           onBlur={onBlur}
           tabIndex={0}
-          className={"select " + className}
+          className="select w-full"
         >
-          {renderValues()}
+          {renderChosen()}
           <span className={clsx(isOpen ? "rotate-180" : "transform-none")}>
             <Chevron />
           </span>
@@ -154,6 +155,7 @@ const Component: FC<Props> = ({
             <Input
               // @ts-ignore
               onChange={setSearch}
+              onBlur={onBlur}
               label=""
               value={search}
               placeholder="Cari entri"

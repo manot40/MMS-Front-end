@@ -20,7 +20,7 @@ const options = [
 
 const NewTransaction: NextPage = () => {
   const { width } = useWindowSize();
-  const [tableData, setTableData] = useState([{ item: "", quantity: 0 }]);
+  const [tableData, setTableData] = useState([{ item: "", quantity: 1 }]);
   const [warehouse, setWarehouse] = useState("");
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
@@ -48,7 +48,7 @@ const NewTransaction: NextPage = () => {
 
   const addRow = useCallback(() => {
     const newData = [...tableData];
-    newData.push({ item: "", quantity: 0 });
+    newData.push({ item: "", quantity: 1 });
     setTableData(newData);
   }, [tableData]);
 
@@ -80,25 +80,25 @@ const NewTransaction: NextPage = () => {
           />
           <Select
             value={type}
-            label="Transaksi"
+            labelHtml="Transaksi"
             placeholder="Pilih Transaksi"
             className="w-36"
             required
             options={[
-              { id: "out", value: "Keluar" },
-              { id: "in", value: "Masuk" },
+              { id: "out", label: "Keluar" },
+              { id: "in", label: "Masuk" },
             ]}
             onChange={(val) => setType(val as string)}
           />
           <Select
             value={warehouse}
-            label="Gudang"
+            labelHtml="Gudang"
             placeholder="Pilih Gudang"
             className="w-44"
             required
             options={[
-              { id: "1", value: "Gudang SOS" },
-              { id: "2", value: "Gudang Virtus" },
+              { id: "1", "label": "Gudang SOS" },
+              { id: "2", "label": "Gudang Virtus" },
             ]}
             onChange={(val) => setWarehouse(val as string)}
           />
@@ -127,21 +127,21 @@ const NewTransaction: NextPage = () => {
               </tr>
             </thead>
             <tbody>
-              {tableData.map((obj, idx) => (
+              {tableData.map((data, idx) => (
                 <tr key={idx}>
                   <td className="w-56 md:w-1/2">
                     <Select
                       searchable
                       placeholder="Input Nama Barang"
-                      parentClass="w-56 md:w-auto"
-                      className="w-full"
-                      value={obj.item}
+                      className="w-56 md:w-auto"
+                      value={data.item}
+                      labelKey="value"
                       options={options}
                       onChange={(val) => itemChanged(val as string, idx)}
                     />
                   </td>
                   <td>
-                    <p>{options.find(val => val.id === obj.item)?.unit || "-"}</p>
+                    <p>{options.find(val => val.id === data.item)?.unit || "-"}</p>
                   </td>
                   <td>
                     <Input
@@ -149,12 +149,13 @@ const NewTransaction: NextPage = () => {
                       type="number"
                       placeholder="Jumlah Barang"
                       parentClass="w-24 md:w-auto"
-                      value={obj.quantity}
+                      value={data.quantity}
                       onChange={(val) => onQuantityChanged(val, idx)}
                     />
                   </td>
                   <td>
                     <Button
+                      tabIndex={-1}
                       onClick={() => deleteRow(idx)}
                       className={clsx(
                         "danger",

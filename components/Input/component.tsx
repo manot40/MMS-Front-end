@@ -11,22 +11,24 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   onChange?: (e: any) => void;
 }
 
-const Component: FC<Props> = ({
-  label,
-  placeholder,
-  type,
-  disabled,
-  value,
-  parentClass,
-  variant = "default",
-  colorScheme = "primary",
-  className,
-  onChange,
-}) => {
+const Component: FC<Props> = (props) => {
+  const {
+    label,
+    placeholder,
+    type,
+    disabled,
+    value,
+    parentClass,
+    variant = "default",
+    colorScheme = "primary",
+    className,
+    onChange,
+  } = props;
   return (
     <div className={"form-group max-w-content " + parentClass}>
       {label && <label className={"text-xs ml-1 mb-2 " + (disabled && "text-neutral-500")}>{label}</label>}
       <input
+        {...props}
         className={"input " + className}
         placeholder={placeholder}
         type={type}
