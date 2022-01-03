@@ -20,11 +20,20 @@ const options = [
 
 const NewTransaction: NextPage = () => {
   const { width } = useWindowSize();
-  const [tableData, setTableData] = useState([{ item: "", quantity: 1 }]);
+  const [tableData, setTableData] = useState(defaultData(3));
   const [warehouse, setWarehouse] = useState("");
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
   const [type, setType] = useState("");
+  
+  function defaultData (count = 1) {
+    const data = [];
+    while (count > 0) {
+      data.push({ item: "", quantity: 1 });
+      count--;
+    }
+    return data;
+  };
 
   const itemChanged = useCallback<(val: string, idx: number) => void>(
     (val, idx) => {
@@ -48,7 +57,7 @@ const NewTransaction: NextPage = () => {
 
   const addRow = useCallback(() => {
     const newData = [...tableData];
-    newData.push({ item: "", quantity: 1 });
+    newData.push(defaultData()[0]);
     setTableData(newData);
   }, [tableData]);
 
@@ -66,7 +75,7 @@ const NewTransaction: NextPage = () => {
       <div className="block md:flex mb-8">
         <div
           className={clsx(
-            "flex space-x-2 max-w-max mb-4 md:mb-0 md:mr-2",
+            "flex space-x-2 mb-4 md:mb-0 md:mr-2",
             width < 768 && "overflow-x-auto"
           )}
         >
@@ -82,7 +91,7 @@ const NewTransaction: NextPage = () => {
             value={type}
             labelHtml="Transaksi"
             placeholder="Pilih Transaksi"
-            className="w-36"
+            className="w-32 min-w-fit"
             required
             options={[
               { id: "out", label: "Keluar" },
@@ -94,7 +103,7 @@ const NewTransaction: NextPage = () => {
             value={warehouse}
             labelHtml="Gudang"
             placeholder="Pilih Gudang"
-            className="w-44"
+            className="w-44 min-w-fit"
             required
             options={[
               { id: "1", "label": "Gudang SOS" },
@@ -180,7 +189,7 @@ const NewTransaction: NextPage = () => {
         </div>
         <div className="flex justify-end my-8 space-x-2">
           <Button
-            className="info w-full md:w-1/4"
+            className="w-full md:w-1/4"
             onClick={() => alert(JSON.stringify(tableData))}
           >
             Submit

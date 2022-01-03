@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, memo } from "react";
+import { FC, forwardRef, HTMLAttributes, memo, RefObject } from "react";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   type?: string;
@@ -11,7 +11,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   onChange?: (e: any) => void;
 }
 
-const Component: FC<Props> = (props) => {
+const InputComponent: FC<Props> = (props, ref) => {
   const {
     label,
     placeholder,
@@ -29,6 +29,7 @@ const Component: FC<Props> = (props) => {
       {label && <label className={"text-xs ml-1 mb-2 " + (disabled && "text-neutral-500")}>{label}</label>}
       <input
         {...props}
+        ref={ref}
         className={"input " + className}
         placeholder={placeholder}
         type={type}
@@ -39,5 +40,5 @@ const Component: FC<Props> = (props) => {
     </div>
   );
 };
-
-export const Input = memo(Component);
+// @ts-ignore
+export const Input = memo(forwardRef(InputComponent));

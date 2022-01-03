@@ -26,24 +26,6 @@
 }
 
 @layer components {
-  .header-wrapper {
-    @apply sticky z-20 w-full border-b backdrop-blur-md border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-400
-  }
-  .profile-field {
-    @apply hidden md:flex border border-transparent px-4 py-2 rounded-xl text-sm transition-colors cursor-pointer duration-300
-  }
-  .profile-field:hover {
-    @apply border-neutral-500 text-black dark:text-white
-  }
-  .sub-menubar {
-    @apply text-sm block md:flex space-x-4;
-  }
-  .sub-menubar > a {
-    @apply px-2 transition-colors hover:text-black dark:hover:text-white;
-  }
-  .sub-menubar .active {
-    @apply text-black dark:text-white font-semibold;
-  }
   .btn {
     @apply text-white dark:text-black bg-black dark:bg-white px-4 py-2 text-sm inline-flex items-center justify-center font-semibold rounded-lg transition-all
   }
@@ -146,5 +128,11 @@
 @layer utilities {
   .form-group {
     @apply flex flex-col
+  }
+  .submenu > a {
+    @apply px-2 transition-colors hover:text-black dark:hover:text-white;
+  }
+  .submenu .active {
+    @apply text-black dark:text-white font-semibold;
   }
 }

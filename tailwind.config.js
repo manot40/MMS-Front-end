@@ -13,10 +13,10 @@ module.exports = {
         display: ["Rubik", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        "danger": "#dc2626",
-        "success": "#16a34a",
-        "info": "#1976d2",
-        "warning": "#fbbf24",
+        danger: "#e60000",
+        success: "#16a34a",
+        info: "#0070f3",
+        warning: "#f5a623",
       }
     },
   },

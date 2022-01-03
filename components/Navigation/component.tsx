@@ -21,46 +21,63 @@ const Component: FC = () => {
   }, [setTheme, theme]);
 
   return (
-    <header className="header-wrapper -top-[4.35rem] md:-top-20">
+    <header className="sticky z-20 w-full border-b backdrop-blur-md border-neutral-300 dark:border-neutral-600 -top-[4.35rem] md:-top-20">
       <div className="absolute flex -z-10 w-full h-full opacity-80 bg-white dark:bg-black" />
       <Container className="flex items-center justify-between w-auto py-4">
         <Link passHref href="/">
-          <div className="inline-flex text-xl text-black dark:text-white">
+          <div className="inline-flex text-xl">
             <h1 className="tracking-wide font-extrabold select-none">MMS</h1>
             &nbsp;
             <p className="tracking-wider select-none">APP</p>
           </div>
         </Link>
-        <div className="group profile-field">
-          <span className="mr-4 self-center">Kevin Sandiho</span>
-          <Image src="https://github.com/manot40.png" alt="Yeah" width={30} height={30} className="rounded-full"/>
+        <div className="hidden md:flex px-4 py-2 cursor-pointer transition-colors duration-300 hover:text-black hover:dark:text-white text-neutral-600 dark:text-neutral-400">
+          <span className="mr-4 self-center text-sm">John Doe</span>
+          <Image
+            src="https://github.com/manot40.png"
+            alt="Yeah"
+            width={28}
+            height={28}
+            className="rounded-full"
+          />
         </div>
         <div className="md:hidden cursor-pointer hover:text-black dark:hover:text-white">
           {/** @ts-ignore */}
-          <ion-icon
-            name="menu"
-            size="large"
-          />
+          <ion-icon name="menu" size="large" />
         </div>
       </Container>
-      <Container className={clsx("flex items-center justify-between w-auto py-2", width < 480 && "overflow-x-auto")}>
+      <Container
+        className={clsx(
+          "flex items-center justify-between w-auto py-2 text-neutral-600 dark:text-neutral-400",
+          width < 480 && "overflow-x-auto"
+        )}
+      >
         <div className="flex items-center">
-          <div className="sub-menubar">
+          <div className="submenu text-sm block md:flex space-x-4">
             <Link href="/">
               <a className={pathname === "/" ? "active" : ""}>Ringkasan</a>
             </Link>
             <Link href="/warehouse">
-              <a className={pathname.match('warehouse') ? "active" : ""}>Gudang</a>
+              <a className={pathname.match("warehouse") ? "active" : ""}>
+                Gudang
+              </a>
             </Link>
             <Link href="/product">
-              <a className={pathname.match('product') ? "active" : ""}>Produk</a>
+              <a className={pathname.match("product") ? "active" : ""}>
+                Produk
+              </a>
             </Link>
             <Link href="/transaction">
-              <a className={pathname.match('transaction') ? "active" : ""}>Transaksi</a>
+              <a className={pathname.match("transaction") ? "active" : ""}>
+                Transaksi
+              </a>
             </Link>
           </div>
         </div>
-        <div className="flex space-x-2 cursor-pointer hover:text-black dark:hover:text-white" onClick={toggleTheme}>
+        <div
+          className="flex space-x-2 cursor-pointer transition-colors duration-300 hover:text-black dark:hover:text-white"
+          onClick={toggleTheme}
+        >
           <span className="text-sm self-center hidden md:block">
             Tema {theme === "light" ? "Terang" : "Gelap"}
           </span>

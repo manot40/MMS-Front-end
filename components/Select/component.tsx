@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Input } from "components";
 import { Chevron } from "./Chevron";
 import { filterArray, prettyString } from "libs/utils";
-import { FC, useCallback, useState, useEffect, memo } from "react";
+import { FC, useCallback, useState, useEffect, useRef, memo } from "react";
 
 type Option = { [key: string]: string };
 
@@ -23,7 +23,7 @@ interface Props {
   onChange?: (value: string | string[]) => void;
 }
 
-const Component: FC<Props> = ({
+const SelectComponent: FC<Props> = ({
   labelHtml = "",
   placeholder = "Pilih item",
   idKey = "id",
@@ -36,12 +36,14 @@ const Component: FC<Props> = ({
   value,
   searchable,
   required,
-  onChange
+  onChange,
 }) => {
+  const searchInput = useRef<HTMLInputElement>(null);
   const [chosen, setChosen] = useState<Option[]>([]);
+  const [focus, setFocus] = useState<Option>({});
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [isFocus, setIsFocus] = useState(false);
+  const [isHover, setIsHover] = useState(false);
 
   useEffect(() => {
     const def = required && options[0] ? [options[0]] : [];
@@ -49,9 +51,11 @@ const Component: FC<Props> = ({
       const target = options.find((option) => option[idKey] === value);
       setChosen(target ? [target] : def);
     } else {
-      setChosen(value ? options.filter((option) => value.includes(option[idKey])) : def);
+      setChosen(
+        value ? options.filter((option) => value.includes(option[idKey])) : def
+      );
     }
-  }, [value])
+  }, [value]);
 
   useEffect(() => {
     if (onChange) {
@@ -60,22 +64,63 @@ const Component: FC<Props> = ({
     }
   }, [chosen]);
 
+  useEffect(() => {
+    !isOpen && setSearch("");
+  }, [isOpen]);
+
   const onClick = useCallback(() => {
     setIsOpen(!isOpen);
   }, [isOpen]);
 
   const onBlur = useCallback(() => {
-    !isFocus && setIsOpen(false);
-  }, [isFocus]);
+    !isHover && setIsOpen(false);
+  }, [isHover]);
+
+  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log(e);
+    switch (e.key) {
+      case " ":
+        setIsOpen(!isOpen);
+      case "Enter":
+        setIsOpen(true);
+        setIsHover(true);
+        searchable && setTimeout(() => searchInput.current?.focus(), 300);
+        break;
+      case "Escape":
+      case "Tab":
+        e.preventDefault();
+        setIsOpen(false);
+        setIsHover(false);
+        break;
+      // case "ArrowDown":
+      //   e.preventDefault();
+      //   (() => {
+      //     const idx = chosen.findIndex((val) => val === focus);
+      //     const next = idx === -1 ? 0 : idx + 1;
+      //     setFocus(options[next]);
+      //   })();
+      //   break;
+      // case "ArrowUp":
+      //   e.preventDefault();
+      //   (() => {
+      //     const idx = chosen.findIndex((val) => val === focus);
+      //     const next = idx === -1 ? 0 : idx - 1;
+      //     setFocus(options[next]);
+      //   })();
+      //   break;
+      default:
+        break;
+    }
+  }, []);
 
   const onOptionClick = useCallback(
     (e) => {
       const { id, label } = e.currentTarget.dataset;
-      const obj = { [idKey]: id, [labelKey]: label }
+      const obj = { [idKey]: id, [labelKey]: label };
       if (!multiple) {
         setChosen([obj]);
         setIsOpen(false);
-        setIsFocus(false);
+        setIsHover(false);
       } else {
         console.log("Multiple");
       }
@@ -86,7 +131,11 @@ const Component: FC<Props> = ({
   const renderChosen = () => {
     if (chosen[0]) {
       const result = multiple
-        ? chosen.map((val, i) => <div key={i.toString()} className="badge">{val[labelKey]}</div>)
+        ? chosen.map((val, i) => (
+            <div key={i.toString()} className="badge">
+              {val[labelKey]}
+            </div>
+          ))
         : chosen[0][labelKey];
       return <div className="text-xs">{result}</div>;
     }
@@ -109,7 +158,8 @@ const Component: FC<Props> = ({
           onClick={onOptionClick}
           className={clsx(
             "option",
-            chosen.find((val) => val[labelKey] === option[labelKey]) && "selected"
+            chosen.find((val) => val[labelKey] === option[labelKey]) &&
+              "selected"
           )}
         >
           {prettyString(option[labelKey])}
@@ -119,21 +169,11 @@ const Component: FC<Props> = ({
   }, [search, chosen]);
 
   return (
-    <div className={clsx("form-group min-w-content", className)}>
+    <div className={clsx("form-group", className)} onKeyDown={onKeyDown}>
       {isOpen && (
         <div className="select-wrapper">
-          <div className="dark:bg-black bg-neutral-800 opacity-80 w-full h-full" />
+          <div className="dark:bg-black bg-neutral-800 opacity-60 w-full h-full" />
           <h1>{placeholder}</h1>
-          <div
-            className="md:hidden cursor-pointer fixed text-white text-2xl font-semibold top-[16vw] right-[5.5vw] mt-0.5"
-            onClick={() => (setIsFocus(false), setIsOpen(false))}
-          >
-            {/** @ts-ignore */}
-            <ion-icon
-              name="close"
-              size="large"
-            />
-          </div>
         </div>
       )}
       <label className="text-xs ml-1 mb-2">{labelHtml}</label>
@@ -151,13 +191,15 @@ const Component: FC<Props> = ({
         </div>
         <div
           className={clsx("options", !isOpen && "-translate-y-2 invisible")}
-          onMouseEnter={() => setIsFocus(true)}
-          onMouseLeave={() => setIsFocus(false)}
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
         >
           {options.length && searchable ? (
             <Input
               // @ts-ignore
               onChange={setSearch}
+              ref={searchInput}
+              onFocus={() => {}}
               onBlur={onBlur}
               label=""
               value={search}
@@ -176,4 +218,4 @@ const Component: FC<Props> = ({
   );
 };
 
-export const Select = memo(Component);
+export const Select = memo(SelectComponent);
