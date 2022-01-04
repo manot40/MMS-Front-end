@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import clsx from "clsx";
 import { Input } from "components";
 import { Chevron } from "./Chevron";
@@ -21,7 +20,7 @@ interface Props {
   searchable?: boolean;
   required?: boolean;
   onChange?: (value: string | string[]) => void;
-};
+}
 
 const SelectComponent: FC<Props> = ({
   labelHtml = "",
@@ -49,7 +48,7 @@ const SelectComponent: FC<Props> = ({
 
   useEffect(() => {
     const def = required && options[0] ? [options[0]] : [];
-    if (!Array.isArray(value)) {
+    if (!multiple) {
       const target = options.find((option) => option[idKey] === value);
       setChosen(target ? [target] : def);
     } else {
@@ -57,13 +56,14 @@ const SelectComponent: FC<Props> = ({
         value ? options.filter((option) => value.includes(option[idKey])) : def
       );
     }
-  }, [value]);
+  }, [idKey, multiple, options, required, value]);
 
   useEffect(() => {
     if (onChange) {
       const toObj: string[] = chosen.map((value) => value[idKey].toString());
       multiple ? onChange(toObj) : onChange(toObj[0]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosen]);
 
   useEffect(() => {
@@ -78,44 +78,59 @@ const SelectComponent: FC<Props> = ({
     !isHover && setIsOpen(false);
   }, [isHover]);
 
-  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (e.key) {
-      case " ":
-        setIsOpen(!isOpen);
-        break;
-      case "Enter":
-        setIsOpen(true);
-        setIsHover(true);
-        searchable && setTimeout(() => searchInput.current?.focus(), 300);
-        break;
-      case "Escape":
-      case "Tab":
-        focus[idKey] && e.preventDefault();
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      const close = () => {
+        setFocus({});
         setIsOpen(false);
         setIsHover(false);
-        break;
-      case "ArrowDown":
-        e.preventDefault();
-        !isOpen && setIsOpen(true);
-        setFocus((() => {
-          const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
-          const next = idx === -1 ? 0 : idx + 1;
-          return options[next];
-        })());
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        !isOpen && setIsOpen(true);
-        setFocus((() => {
-          const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
-          const next = idx === -1 ? 0 : idx - 1;
-          return options[next];
-        })());
-        break;
-      default:
-        break;
-    }
-  }, []);
+      };
+      switch (e.key) {
+        case " ":
+          break;
+        case "Enter": {
+          setIsOpen(true);
+          setIsHover(true);
+          if(!focus[idKey]) searchable && setTimeout(() => searchInput.current?.focus(), 300);
+          else focus[idKey] && setChosen([focus]), close();
+          break;
+        }
+        case "Escape":
+          e.preventDefault();
+          close();
+          break;
+        case "Tab":
+          focus[idKey] && e.preventDefault();
+          !focus && (setChosen([focus]), close());
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          !isOpen && setIsOpen(true);
+          (() => {
+            const filter = filterArray(options, labelKey, search);
+            const idx = filter.findIndex((val) => val[idKey] === focus[idKey]);
+            const next = idx === -1 ? filter.length - 1 : idx - 1;
+            setFocus({ ...filter[next] });
+            focusedOption.current?.scrollIntoView(false);
+          })();
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          !isOpen && setIsOpen(true);
+          (() => {
+            const filter = filterArray(options, labelKey, search);
+            const idx = filter.findIndex((val) => val[idKey] === focus[idKey]);
+            const next = idx === -1 ? 0 : idx + 1;
+            setFocus({ ...filter[next] });
+            focusedOption.current?.scrollIntoView();
+          })();
+          break;
+        default:
+          break;
+      }
+    },
+    [focus, idKey, isOpen, labelKey, options, search, searchable]
+  );
 
   const onOptionClick = useCallback(
     (e) => {
@@ -129,7 +144,7 @@ const SelectComponent: FC<Props> = ({
         console.log("Multiple");
       }
     },
-    [multiple]
+    [idKey, labelKey, multiple]
   );
 
   const renderChosen = () => {
@@ -164,14 +179,16 @@ const SelectComponent: FC<Props> = ({
           className={clsx(
             "option",
             focus[idKey] === option[idKey] && "focused",
-            chosen.find((val) => val[labelKey] === option[labelKey]) && "selected"
+            chosen.find((val) => val[labelKey] === option[labelKey]) &&
+              "selected"
           )}
         >
           {prettyString(option[labelKey])}
         </div>
       );
     });
-  }, [search, chosen]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, chosen, focus]);
 
   return (
     <div className={clsx("form-group", className)} onKeyDown={onKeyDown}>
