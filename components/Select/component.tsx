@@ -94,19 +94,19 @@ const SelectComponent: FC<Props> = ({
         break;
       case "ArrowDown":
         e.preventDefault();
-        (() => {
+        setFocus((() => {
           const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
           const next = idx === -1 ? 0 : idx + 1;
-          setFocus(options[next]);
-        })();
+          return options[next];
+        })());
         break;
       case "ArrowUp":
         e.preventDefault();
-        (() => {
+        setFocus((() => {
           const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
           const next = idx === -1 ? 0 : idx - 1;
-          setFocus(options[next]);
-        })();
+          return options[next];
+        })());
         break;
       default:
         break;
