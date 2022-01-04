@@ -1,4 +1,4 @@
-import { FC, forwardRef, HTMLAttributes, memo, RefObject } from "react";
+import { forwardRef, HTMLAttributes, LegacyRef, memo } from "react";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   type?: string;
@@ -11,7 +11,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   onChange?: (e: any) => void;
 }
 
-const InputComponent: FC<Props> = (props, ref) => {
+const InputComponent = (props: Props, ref: LegacyRef<HTMLInputElement>) => {
   const {
     label,
     placeholder,
@@ -26,7 +26,11 @@ const InputComponent: FC<Props> = (props, ref) => {
   } = props;
   return (
     <div className={"form-group max-w-content " + parentClass}>
-      {label && <label className={"text-xs ml-1 mb-2 " + (disabled && "text-neutral-500")}>{label}</label>}
+      {label && (
+        <label className={"text-xs ml-1 mb-2 " + (disabled && "text-neutral-500")}>
+          {label}
+        </label>
+      )}
       <input
         {...props}
         ref={ref}
@@ -40,5 +44,5 @@ const InputComponent: FC<Props> = (props, ref) => {
     </div>
   );
 };
-// @ts-ignore
-export const Input = memo(forwardRef(InputComponent));
+
+export const Input = memo(forwardRef<HTMLInputElement, Props>(InputComponent));

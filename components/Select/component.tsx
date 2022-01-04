@@ -9,19 +9,19 @@ type Option = { [key: string]: string };
 
 interface Props {
   labelHtml?: string;
-  placeholder: string;
   idKey?: string;
   labelKey?: string;
+  placeholder: string;
   multiple?: boolean;
   variant?: "default" | "outline" | "flat";
   colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
   className?: string;
-  options: Option[];
+  options: (Option | Option)[];
   value?: string | string[];
   searchable?: boolean;
   required?: boolean;
   onChange?: (value: string | string[]) => void;
-}
+};
 
 const SelectComponent: FC<Props> = ({
   labelHtml = "",
@@ -77,10 +77,10 @@ const SelectComponent: FC<Props> = ({
   }, [isHover]);
 
   const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e);
     switch (e.key) {
       case " ":
         setIsOpen(!isOpen);
+        break;
       case "Enter":
         setIsOpen(true);
         setIsHover(true);
@@ -88,26 +88,26 @@ const SelectComponent: FC<Props> = ({
         break;
       case "Escape":
       case "Tab":
-        e.preventDefault();
+        focus[idKey] && e.preventDefault();
         setIsOpen(false);
         setIsHover(false);
         break;
-      // case "ArrowDown":
-      //   e.preventDefault();
-      //   (() => {
-      //     const idx = chosen.findIndex((val) => val === focus);
-      //     const next = idx === -1 ? 0 : idx + 1;
-      //     setFocus(options[next]);
-      //   })();
-      //   break;
-      // case "ArrowUp":
-      //   e.preventDefault();
-      //   (() => {
-      //     const idx = chosen.findIndex((val) => val === focus);
-      //     const next = idx === -1 ? 0 : idx - 1;
-      //     setFocus(options[next]);
-      //   })();
-      //   break;
+      case "ArrowDown":
+        e.preventDefault();
+        (() => {
+          const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
+          const next = idx === -1 ? 0 : idx + 1;
+          setFocus(options[next]);
+        })();
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        (() => {
+          const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
+          const next = idx === -1 ? 0 : idx - 1;
+          setFocus(options[next]);
+        })();
+        break;
       default:
         break;
     }
