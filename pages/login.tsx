@@ -1,11 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { Button, Input } from "components";
+import useAuth from "libs/context/useAuth";
+import { useRouter } from "next/router";
 import { NextPage } from "next/types";
 
-import { Dashboard } from "layout";
-import { Button, Input } from "components";
-
 const Home: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { loading, login } = useAuth();
+
+  const submitLogin = useCallback((e) => {
+    e.preventDefault();
+    login(username, password, true);
+  }, [login, password, username]);
 
   return (
     <div className="container mx-auto max-w-xs h-screen flex items-center -m-8">
@@ -17,15 +25,19 @@ const Home: NextPage = () => {
         </div>
         <form>
           <Input
-            label="Email"
-            placeholder="john@doe.com"
-            type="email"
+            label="Username"
+            placeholder="johndoe"
+            type="text"
+            value={username}
+            onChange={(val) => setUsername(val)}
             className="mb-4 text-sm dark:border-none"
           />
           <Input
             label="Password"
             placeholder="********"
             type="password"
+            value={password}
+            onChange={(val) => setPassword(val)}
             className="mb-4 text-sm dark:border-none"
           />
           <div className="flex ml-1 mb-8">
@@ -36,7 +48,7 @@ const Home: NextPage = () => {
             />
             <label htmlFor="test" className="text-xs ml-4 mb-2">Remember Me</label>
           </div>
-          <Button className="w-full" isLoading={isLoading} onClick={() => setIsLoading(true)}>Submit</Button>
+          <Button className="w-full" isLoading={loading} onClick={submitLogin}>Submit</Button>
         </form>
       </div>
     </div>

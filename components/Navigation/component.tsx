@@ -7,12 +7,15 @@ import clsx from "clsx";
 
 import { Container } from "components";
 import { useWindowSize } from "libs/hooks/useWindowSize";
+import useAuth from "libs/context/useAuth";
 
 const Component: FC = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  
   const { pathname } = useRouter();
   const { width } = useWindowSize();
+  const { user } = useAuth();
 
   useEffect(() => setMounted(true), []);
 
@@ -32,7 +35,7 @@ const Component: FC = () => {
           </div>
         </Link>
         <div className="hidden md:flex px-4 py-2 cursor-pointer transition-colors duration-300 hover:text-black hover:dark:text-white text-neutral-600 dark:text-neutral-400">
-          <span className="mr-4 self-center text-sm">John Doe</span>
+          <span className="mr-4 self-center text-sm">{user?.name}</span>
           <Image
             src="https://github.com/manot40.png"
             alt="Yeah"
