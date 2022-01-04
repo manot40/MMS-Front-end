@@ -16,7 +16,7 @@ interface Props {
   variant?: "default" | "outline" | "flat";
   colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
   className?: string;
-  options: (Option | Option)[];
+  options: Option[];
   value?: string | string[];
   searchable?: boolean;
   required?: boolean;
@@ -39,6 +39,8 @@ const SelectComponent: FC<Props> = ({
   onChange,
 }) => {
   const searchInput = useRef<HTMLInputElement>(null);
+  const focusedOption = useRef<HTMLDivElement>(null);
+
   const [chosen, setChosen] = useState<Option[]>([]);
   const [focus, setFocus] = useState<Option>({});
   const [isOpen, setIsOpen] = useState(false);
@@ -94,6 +96,7 @@ const SelectComponent: FC<Props> = ({
         break;
       case "ArrowDown":
         e.preventDefault();
+        !isOpen && setIsOpen(true);
         setFocus((() => {
           const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
           const next = idx === -1 ? 0 : idx + 1;
@@ -102,6 +105,7 @@ const SelectComponent: FC<Props> = ({
         break;
       case "ArrowUp":
         e.preventDefault();
+        !isOpen && setIsOpen(true);
         setFocus((() => {
           const idx = options.findIndex((val) => val[idKey] === focus[idKey]);
           const next = idx === -1 ? 0 : idx - 1;
@@ -152,14 +156,15 @@ const SelectComponent: FC<Props> = ({
     return list.map((option, idx) => {
       return (
         <div
+          ref={focus[idKey] === option[idKey] ? focusedOption : undefined}
           key={option[idKey] || idx}
           data-id={option[idKey]}
           data-label={option[labelKey]}
           onClick={onOptionClick}
           className={clsx(
             "option",
-            chosen.find((val) => val[labelKey] === option[labelKey]) &&
-              "selected"
+            focus[idKey] === option[idKey] && "focused",
+            chosen.find((val) => val[labelKey] === option[labelKey]) && "selected"
           )}
         >
           {prettyString(option[labelKey])}
