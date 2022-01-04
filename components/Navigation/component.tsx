@@ -1,13 +1,12 @@
 import { FC, memo, useCallback, useEffect, useState } from "react";
+import { useWindowSize } from "libs/hooks/useWindowSize";
+import { useAuth } from "libs/context/AuthContext";
 import { useRouter } from "next/router";
+import { Container } from "components";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-
-import { Container } from "components";
-import { useWindowSize } from "libs/hooks/useWindowSize";
-import useAuth from "libs/context/useAuth";
 
 const Component: FC = () => {
   const [mounted, setMounted] = useState(false);
@@ -15,7 +14,7 @@ const Component: FC = () => {
   
   const { pathname } = useRouter();
   const { width } = useWindowSize();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => setMounted(true), []);
 
@@ -34,7 +33,10 @@ const Component: FC = () => {
             <p className="tracking-wider select-none">APP</p>
           </div>
         </Link>
-        <div className="hidden md:flex px-4 py-2 cursor-pointer transition-colors duration-300 hover:text-black hover:dark:text-white text-neutral-600 dark:text-neutral-400">
+        <div
+          className="hidden md:flex px-4 py-2 cursor-pointer transition-colors duration-300 hover:text-black hover:dark:text-white text-neutral-600 dark:text-neutral-400"
+          onClick={() => logout()}
+        >
           <span className="mr-4 self-center text-sm">{user?.name}</span>
           <Image
             src="https://github.com/manot40.png"

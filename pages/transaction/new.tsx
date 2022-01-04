@@ -4,36 +4,31 @@ import { useWindowSize } from "libs/hooks/useWindowSize";
 import { Dashboard } from "layout";
 import { NextPage } from "next";
 import clsx from "clsx";
-
-const options = [
-  { id: "1", value: "Barang 1", unit: "PCS" },
-  { id: "2", value: "Barang 2", unit: "KG" },
-  { id: "3", value: "Barang 3", unit: "MTR" },
-  { id: "4", value: "Barang 4", unit: "GLN" },
-  { id: "5", value: "Barang 5", unit: "BTL" },
-  { id: "6", value: "Barang 6", unit: "PCS" },
-  { id: "7", value: "Barang 7", unit: "BTL" },
-  { id: "8", value: "Barang 8", unit: "LTR" },
-  { id: "9", value: "Barang 9", unit: "KG" },
-  { id: "10", value: "Barang 10", unit: "PCS" },
-];
+import { getWarehouseList } from "libs/apis/warehouse";
+import useSWR from "swr";
+import { useAuth } from "libs/context/AuthContext";
+import { getItemList } from "libs/apis/item";
 
 const NewTransaction: NextPage = () => {
   const { width } = useWindowSize();
   const [tableData, setTableData] = useState(defaultData(3));
   const [warehouse, setWarehouse] = useState("");
+  const [type, setType] = useState("");
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
-  const [type, setType] = useState("");
-  
-  function defaultData (count = 1) {
+
+  const { token } = useAuth();
+  const { data: warehouseList } = useSWR(token, getWarehouseList);
+  const { data: itemList } = useSWR([token, { warehouse }], getItemList);
+
+  function defaultData(count = 1) {
     const data = [];
     while (count > 0) {
       data.push({ item: "", quantity: 1 });
       count--;
     }
     return data;
-  };
+  }
 
   const itemChanged = useCallback<(val: string, idx: number) => void>(
     (val, idx) => {
@@ -105,10 +100,9 @@ const NewTransaction: NextPage = () => {
             placeholder="Pilih Gudang"
             className="w-44 min-w-fit"
             required
-            options={[
-              { id: "1", "label": "Gudang SOS" },
-              { id: "2", "label": "Gudang Virtus" },
-            ]}
+            options={warehouseList}
+            idKey="_id"
+            labelKey="name"
             onChange={(val) => setWarehouse(val as string)}
           />
         </div>
@@ -126,7 +120,7 @@ const NewTransaction: NextPage = () => {
           <Button onClick={addRow}>Tambah Baris</Button>
         </div>
         <div className={clsx(width < 768 && "overflow-x-auto")}>
-          <table className="table-parent" style={{borderSpacing: 0}}>
+          <table className="table-parent" style={{ borderSpacing: 0 }}>
             <thead>
               <tr>
                 <th>Nama Barang</th>
@@ -144,13 +138,18 @@ const NewTransaction: NextPage = () => {
                       placeholder="Input Nama Barang"
                       className="w-56 md:w-auto"
                       value={data.item}
-                      labelKey="value"
-                      options={options}
+                      idKey="_id"
+                      labelKey="name"
+                      options={itemList}
                       onChange={(val) => itemChanged(val as string, idx)}
                     />
                   </td>
                   <td>
-                    <p>{options.find(val => val.id === data.item)?.unit || "-"}</p>
+                    <p>
+                      {(Array.isArray(itemList) &&
+                        itemList.find((val) => val.id === data.item)?.unit) ||
+                        "-"}
+                    </p>
                   </td>
                   <td>
                     <Input

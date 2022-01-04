@@ -31,7 +31,7 @@ const SelectComponent: FC<Props> = ({
   variant = "default",
   colorScheme = "primary",
   className,
-  options,
+  options = [],
   value,
   searchable,
   required,

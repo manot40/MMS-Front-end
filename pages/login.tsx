@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { Button, Input } from "components";
-import useAuth from "libs/context/useAuth";
+import { useAuth } from "libs/context/AuthContext";
 import { useRouter } from "next/router";
 import { NextPage } from "next/types";
 
@@ -8,11 +8,19 @@ const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, login } = useAuth();
+  const { loading, token, login } = useAuth();
+  const { push, query } = useRouter();
+
+  useEffect(() => {
+    if (token) {
+      query.redirect ? push(query.redirect as string) : push("/");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [push, token]);
 
   const submitLogin = useCallback((e) => {
     e.preventDefault();
-    login(username, password, true);
+    login(username, password, true)
   }, [login, password, username]);
 
   return (

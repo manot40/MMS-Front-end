@@ -17,7 +17,7 @@ interface Fetcher {
     url: string,
     options: Obj,
     config: {
-      type?: AxiosMethod;
+      method?: AxiosMethod;
       data?: Obj;
       token?: string;
     }
@@ -27,7 +27,7 @@ interface Fetcher {
 const fetcher: Fetcher = async (
   url,
   options,
-  { type = "get", data = {}, token = "" }
+  { method: type = "get", data = {}, token = "" }
 ) => {
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   switch(type) {

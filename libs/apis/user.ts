@@ -10,11 +10,11 @@ interface IUserRegister {
 }
 
 export const getCurrentUser = async (token: string): Promise<User> => {
-  const { data } = await fetcher("/user/me", {}, {type: "get", token});
+  const { data } = await fetcher("/user/me", {}, {method: "get", token});
   return data;
 }
 
 export const register = async (user: IUserRegister, token: string): Promise<User> => {
-  const { data } = await fetcher("/user/register", {}, {type: "post", data: user, token});
+  const { data } = await fetcher("/user/register", {}, {method: "post", data: user, token});
   return data;
 }

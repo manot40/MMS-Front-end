@@ -15,20 +15,20 @@ export const login = async (loginInfo: LoginInfo): Promise<Token> => {
   const response = await fetcher(
     "/auth/login",
     {},
-    { type: "post", data: loginInfo }
+    { method: "post", data: loginInfo }
   );
   return response;
 };
 
 export const logout = async (token: string): Promise<void> => {
-  await fetcher("/user/logout", {}, { type: "delete", token });
+  await fetcher("/auth/logout", {}, { method: "delete", token });
 };
 
 export const refresh = async (refreshToken: string, token?: string): Promise<Token> => {
   const response = await fetcher(
     "/auth/refresh",
     {},
-    { type: "post", token, data: { refreshToken } }
+    { method: "post", token, data: { refreshToken } }
   );
   return response;
 };
