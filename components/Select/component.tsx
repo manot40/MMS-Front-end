@@ -234,8 +234,8 @@ const SelectComponent: FC<Props> = ({
               label=""
               value={search}
               placeholder="Cari entri"
-              parentClass="border-b border-neutral-300 dark:border-neutral-700"
-              className={clsx(
+              className="border-b border-neutral-300 dark:border-neutral-700"
+              custom={clsx(
                 "rounded-none border-none bg-transparent",
                 !isOpen && "transition-none"
               )}

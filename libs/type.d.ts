@@ -11,7 +11,7 @@ export type User = {
   updatedAt: string;
 }
 
-export interface BaseResponse<Data extends Obj> {
+export interface BaseResponse<Data extends Obj | undefined> {
   success: boolean;
   data?: Data;
   errors?: Obj;

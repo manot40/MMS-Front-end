@@ -3,7 +3,6 @@ import Script from 'next/script'
 import { BaseLayout } from 'layout'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
-import AuthProvider from 'libs/context/AuthContext'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
@@ -16,11 +15,9 @@ function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>MMS Frontend - Next (Dev)</title>
       </Head>
-      <AuthProvider>
-        <BaseLayout>
-          <Component {...pageProps} />
-        </BaseLayout>
-      </AuthProvider>
+      <BaseLayout>
+        <Component {...pageProps} />
+      </BaseLayout>
     </ThemeProvider>
   )
 }

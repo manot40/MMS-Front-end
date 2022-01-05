@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Button, Input } from "components";
 import { useAuth } from "libs/context/AuthContext";
 import { useRouter } from "next/router";
@@ -9,12 +9,8 @@ const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, user, login } = useAuth();
+  const { loading, login } = useAuth();
   const { push, query } = useRouter();
-
-  useEffect(() => {
-    if (user) redirect();
-  }, [user]);
 
   function redirect() {
     query.redirect ? push(query.redirect as string) : push("/");
@@ -22,7 +18,10 @@ const Home: NextPage = () => {
 
   const submitLogin = useCallback((e) => {
     e.preventDefault();
-    login(username, password, true).then((res) => res ? redirect() : null);
+    login(username, password, true).then(({error}) => {
+      if (!error) redirect();
+      else console.log(error);
+    });
   }, [login, password, username]);
 
   return (

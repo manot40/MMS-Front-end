@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { forwardRef, HTMLAttributes, LegacyRef, memo } from "react";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -5,9 +6,9 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   label: string;
   value?: string | number;
   disabled?: boolean;
-  parentClass?: string;
   variant?: "default" | "outline" | "flat";
   colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
+  custom?: string;
   onChange?: (e: any) => void;
 }
 
@@ -18,14 +19,14 @@ const InputComponent = (props: Props, ref: LegacyRef<HTMLInputElement>) => {
     type,
     disabled,
     value,
-    parentClass,
     variant = "default",
     colorScheme = "primary",
+    custom,
     className,
     onChange,
   } = props;
   return (
-    <div className={"form-group max-w-content " + parentClass}>
+    <div className={"form-group " + className}>
       {label && (
         <label className={"text-xs ml-1 mb-2 " + (disabled && "text-neutral-500")}>
           {label}
@@ -34,7 +35,7 @@ const InputComponent = (props: Props, ref: LegacyRef<HTMLInputElement>) => {
       <input
         {...props}
         ref={ref}
-        className={"input " + className}
+        className={clsx("input", custom)}
         placeholder={placeholder}
         type={type}
         disabled={disabled}

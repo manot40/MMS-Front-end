@@ -19,9 +19,13 @@ interface AuthContextType {
   user?: User;
   loading: boolean;
   error?: any;
-  login: (username: string, password: string, rememberMe: boolean) => Promise<boolean>;
   fetcher: IFetcher;
   logout: () => void;
+  login: (
+    username: string,
+    password: string,
+    rememberMe: boolean
+  ) => Promise<{ success: boolean; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -44,11 +48,18 @@ export default function AuthProvider({
   const { pathname, push } = useRouter();
 
   useEffect(() => {
-    const refresh = window ? (localStorage.getItem("refreshToken") || "") : "";
-    const exp = window ? (localStorage.getItem("refreshExpiration") || 0) : 0;
-    if (!isTokenExpire(exp)) refreshToken(refresh).then(() => setLoadingInitial(false));
-    else pathname !== "/login" && push("/login?redirect=" + pathname), setLoadingInitial(false);
+    const refresh = window ? localStorage.getItem("refreshToken") || "" : "";
+    const exp = window ? localStorage.getItem("refreshExpiration") || 0 : 0;
+    if (!isTokenExpire(exp))
+      refreshToken(refresh).then(() => setLoadingInitial(false));
+    else setLoadingInitial(false);
   }, []);
+
+  useEffect(() => {
+    const refresh = localStorage.getItem("refreshToken");
+    if (pathname !== "/login" && !user && !refresh)
+      push("/login?redirect=" + pathname);
+  }, [pathname]);
 
   useEffect(() => {
     if (error) setError(null);
@@ -63,28 +74,25 @@ export default function AuthProvider({
         userApi
           .getCurrentUser(accessToken)
           .then((user) => setUser(user))
-          .catch((err) => (setError(err)))
+          .catch((err) => setError(err));
       })
       .catch((_error) => {
         window.localStorage.clear();
         push("/login?loggedOut=true");
-      })
+      });
   }
 
-  async function fetcher(
-    url: string,
-    options = {},
-  ): Promise<any> {
-    if(loadingInitial) return;
+  async function fetcher(url: string, options = {}): Promise<any> {
+    if (loadingInitial) return;
     const refresh = localStorage.getItem("refreshToken") || "";
     const refreshExp = localStorage.getItem("refreshExpiration") || 0;
     const tokenExp = jwtDecode<any>(token) || 0;
     if (!isTokenExpire(refreshExp)) {
       if (isTokenExpire(tokenExp))
         return refreshToken(refresh).then(() =>
-          Fetcher(url, {...options, token})
+          Fetcher(url, { ...options, token })
         );
-      else return Fetcher(url, {...options, token});
+      else return Fetcher(url, { ...options, token });
     } else {
       setUser(undefined);
       push("/login?loggedOut=true");
@@ -99,15 +107,15 @@ export default function AuthProvider({
         setToken(accessToken);
         const expires = jwtDecode<any>(refreshToken).exp;
         rememberMe &&
-            window &&
-            localStorage.setItem("refreshToken", refreshToken),
-            localStorage.setItem("refreshExpiration", expires);
+          window &&
+          localStorage.setItem("refreshToken", refreshToken),
+          localStorage.setItem("refreshExpiration", expires);
         await userApi.getCurrentUser(accessToken).then(setUser);
-        return true
+        return { success: true };
       })
       .catch((error) => {
         setError(error);
-        return false;
+        return { success: false, error };
       })
       .finally(() => setLoading(false));
   }

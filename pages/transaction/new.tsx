@@ -16,10 +16,10 @@ const NewTransaction: NextPage = () => {
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
 
-  const { fetcher, loading } = useAuth();
+  const { fetcher } = useAuth();
   const { data: warehouseList } = useSWR("/warehouse", fetcher);
-  const { data: itemList} = useSWR(
-    warehouseList ? `/item?warehouse=${warehouse}` : null,
+  const { data: itemList } = useSWR(
+    warehouseList && warehouse ? `/item?warehouse=${warehouse}` : null,
     fetcher
   );
 
@@ -106,7 +106,7 @@ const NewTransaction: NextPage = () => {
             placeholder="Pilih Gudang"
             className="w-44 min-w-fit"
             required
-            options={warehouseList?.data}
+            options={warehouseList ? warehouseList.data : []}
             idKey="_id"
             labelKey="name"
             onChange={(val) => setWarehouse(val as string)}
@@ -146,7 +146,7 @@ const NewTransaction: NextPage = () => {
                       value={data.item}
                       idKey="_id"
                       labelKey="name"
-                      options={itemList?.data}
+                      options={itemList ? itemList.data : []}
                       onChange={(val) => itemChanged(val as string, idx)}
                     />
                   </td>
@@ -162,7 +162,7 @@ const NewTransaction: NextPage = () => {
                       label=""
                       type="number"
                       placeholder="Jumlah Barang"
-                      parentClass="w-24 md:w-auto"
+                      className="w-24 md:w-auto"
                       value={data.quantity}
                       onChange={(val) => onQuantityChanged(val, idx)}
                     />

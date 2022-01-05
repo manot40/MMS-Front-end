@@ -1,4 +1,5 @@
 
+import AuthProvider from 'libs/context/AuthContext'
 import { HTMLAttributes } from "react";
 import { useTheme } from "next-themes";
 import Head from "next/head";
@@ -13,7 +14,9 @@ export const BaseLayout: FC<Props> = ({ children }) => {
       <Head>
         <meta name="theme-color" content={theme === "dark" ? "#000000" : "#FFFFFF"} />
       </Head>
-      {children}
+      <AuthProvider>
+        {children}
+      </AuthProvider>
     </div>
   );
 };
