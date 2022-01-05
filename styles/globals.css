@@ -59,12 +59,6 @@
   .select:focus {
     @apply outline-none 
   }
-  .select-wrapper {
-    @apply fixed md:hidden top-0 left-0 w-screen h-screen z-20 backdrop-blur-md
-  }
-  .select-wrapper>h1 {
-    @apply fixed text-white text-2xl font-semibold top-[16vw] left-[5vw] ml-2
-  }
   .select>span {
     @apply inline-flex absolute text-neutral-500 right-2 top-3 bg-white dark:bg-black transition-transform duration-300
   }

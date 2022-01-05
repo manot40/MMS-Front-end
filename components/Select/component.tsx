@@ -161,7 +161,7 @@ const SelectComponent: FC<Props> = ({
               {val[labelKey]}
             </div>
           ))
-        : chosen[0][labelKey];
+        : prettyString(chosen[0][labelKey]);
       return <div className="text-xs">{result}</div>;
     }
     return <div className="text-xs text-neutral-400">{placeholder}</div>;
@@ -199,9 +199,11 @@ const SelectComponent: FC<Props> = ({
   return (
     <div className={clsx("form-group", className)} onKeyDown={onKeyDown}>
       {isOpen && (
-        <div className="select-wrapper">
-          <div className="dark:bg-black bg-neutral-800 opacity-60 w-full h-full" />
-          <h1>{placeholder}</h1>
+        <div className="fixed md:hidden top-0 left-0 w-screen h-screen z-20 backdrop-blur-md">
+          <div className="dark:bg-black bg-neutral-800 opacity-90 w-full h-full" />
+          <h1 className="fixed text-white text-2xl font-semibold top-[16vw] left-[5vw] ml-2">
+            {placeholder}
+          </h1>
         </div>
       )}
       <label className="text-xs ml-1 mb-2">{labelHtml}</label>

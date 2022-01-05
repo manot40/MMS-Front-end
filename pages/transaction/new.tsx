@@ -1,13 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Input, Select, Button } from "components";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useWindowSize } from "libs/hooks/useWindowSize";
 import { Dashboard } from "layout";
 import { NextPage } from "next";
 import clsx from "clsx";
-import { getWarehouseList } from "libs/apis/warehouse";
 import useSWR from "swr";
 import { useAuth } from "libs/context/AuthContext";
-import { getItemList } from "libs/apis/item";
 
 const NewTransaction: NextPage = () => {
   const { width } = useWindowSize();
@@ -17,9 +16,16 @@ const NewTransaction: NextPage = () => {
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
 
-  const { token } = useAuth();
-  const { data: warehouseList } = useSWR(token, getWarehouseList);
-  const { data: itemList } = useSWR([token, { warehouse }], getItemList);
+  const { fetcher } = useAuth();
+  const { data: warehouseList } = useSWR("/warehouse", fetcher);
+  const { data: itemList } = useSWR(
+    ["/item", { options: { params: { warehouse } } }],
+    fetcher
+  );
+
+  useEffect(() => {
+    setTableData(defaultData(tableData.length));
+  }, [warehouse]);
 
   function defaultData(count = 1) {
     const data = [];
