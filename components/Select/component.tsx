@@ -199,7 +199,7 @@ const SelectComponent: FC<Props> = ({
   return (
     <div className={clsx("form-group", className)} onKeyDown={onKeyDown}>
       {isOpen && (
-        <div className="fixed md:hidden top-0 left-0 w-screen h-screen z-20 backdrop-blur-md">
+        <div className="fixed md:hidden top-0 left-0 w-screen h-screen z-20">
           <div className="dark:bg-black bg-neutral-800 opacity-90 w-full h-full" />
           <h1 className="fixed text-white text-2xl font-semibold top-[16vw] left-[5vw] ml-2">
             {placeholder}
@@ -234,9 +234,9 @@ const SelectComponent: FC<Props> = ({
               label=""
               value={search}
               placeholder="Cari entri"
-              className="border-b border-neutral-300 dark:border-neutral-700"
+              className="sticky top-0 border-b border-neutral-300 dark:border-neutral-700"
               custom={clsx(
-                "rounded-none border-none bg-transparent",
+                "rounded-none border-none bg-white dark:bg-black",
                 !isOpen && "transition-none"
               )}
             />

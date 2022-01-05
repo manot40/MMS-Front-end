@@ -73,7 +73,7 @@
     @apply bg-neutral-300 dark:bg-neutral-700 rounded-full
   }
   .options>.option {
-    @apply px-4 py-3 select-none text-xs cursor-pointer hover:bg-neutral-200 hover:dark:bg-neutral-700
+    @apply px-4 py-4 md:py-3 select-none text-sm md:text-xs cursor-pointer border-b md:border-none dark:border-neutral-900 hover:bg-neutral-200 hover:dark:bg-neutral-700
   }
   .options>.selected {
     @apply dark:bg-neutral-200 bg-neutral-800 dark:text-black text-white hover:bg-black hover:dark:bg-white
