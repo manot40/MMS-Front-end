@@ -8,7 +8,7 @@ const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, user, loading } = useAuth();
+  const { loading, user, login } = useAuth();
   const { push, query } = useRouter();
 
   useEffect(() => {
