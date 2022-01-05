@@ -3,7 +3,7 @@ import { Obj } from "libs/type";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-export type AxiosMethod =
+type AxiosMethod =
   | "get"
   | "delete"
   | "head"
@@ -15,10 +15,10 @@ export type AxiosMethod =
 export interface IFetcher {
   (
     url: string,
-    config: {
+    options?: {
       method?: AxiosMethod;
       data?: Obj;
-      options?: Obj,
+      config?: Obj,
       token?: string;
     }
   ): Promise<any>;
@@ -26,14 +26,14 @@ export interface IFetcher {
 
 const fetcher: IFetcher = async (
   url,
-  { method: type = "get", data = {}, options = {}, token = "" }
+  options = { data: {}, config: {}, token: "" }
 ) => {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  switch(type) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${options.token}`;
+  switch(options.method) {
     case "post" || "put" || "patch":
-      return axios[type](url, data, options).then(res => res.data);
+      return axios[options.method](url, options.data, options.config).then(res => res.data);
     default:
-      return axios[type](url, options).then(res => res.data);
+      return axios[options.method || "get"](url, options.config).then(res => res.data);
   }
 };
 

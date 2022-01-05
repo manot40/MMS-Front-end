@@ -16,15 +16,15 @@ const NewTransaction: NextPage = () => {
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
 
-  const { fetcher } = useAuth();
+  const { fetcher, loading } = useAuth();
   const { data: warehouseList } = useSWR("/warehouse", fetcher);
-  const { data: itemList } = useSWR(
-    ["/item", { options: { params: { warehouse } } }],
+  const { data: itemList} = useSWR(
+    warehouseList ? `/item?warehouse=${warehouse}` : null,
     fetcher
   );
 
   useEffect(() => {
-    setTableData(defaultData(tableData.length));
+    setTableData([...defaultData(tableData.length)]);
   }, [warehouse]);
 
   function defaultData(count = 1) {
@@ -106,7 +106,7 @@ const NewTransaction: NextPage = () => {
             placeholder="Pilih Gudang"
             className="w-44 min-w-fit"
             required
-            options={warehouseList}
+            options={warehouseList?.data}
             idKey="_id"
             labelKey="name"
             onChange={(val) => setWarehouse(val as string)}
@@ -146,7 +146,7 @@ const NewTransaction: NextPage = () => {
                       value={data.item}
                       idKey="_id"
                       labelKey="name"
-                      options={itemList}
+                      options={itemList?.data}
                       onChange={(val) => itemChanged(val as string, idx)}
                     />
                   </td>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from "react";
 import { Button, Input } from "components";
 import { useAuth } from "libs/context/AuthContext";
@@ -12,15 +13,16 @@ const Home: NextPage = () => {
   const { push, query } = useRouter();
 
   useEffect(() => {
-    if (user?._id) {
-      query.redirect ? push(query.redirect as string) : push("/");
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [push, user]);
+    if (user) redirect();
+  }, [user]);
+
+  function redirect() {
+    query.redirect ? push(query.redirect as string) : push("/");
+  }
 
   const submitLogin = useCallback((e) => {
     e.preventDefault();
-    login(username, password, true)
+    login(username, password, true).then((res) => res ? redirect() : null);
   }, [login, password, username]);
 
   return (
@@ -56,7 +58,7 @@ const Home: NextPage = () => {
             />
             <label htmlFor="test" className="text-xs ml-4 mb-2">Remember Me</label>
           </div>
-          <Button className="w-full" isLoading={loading} onClick={submitLogin}>Submit</Button>
+          <Button className="w-full" isLoading={loading as boolean} onClick={submitLogin}>Submit</Button>
         </form>
       </div>
     </div>
