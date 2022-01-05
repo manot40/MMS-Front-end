@@ -99,10 +99,13 @@ export default function AuthProvider({
     const refresh = localStorage.getItem("refreshToken") || "";
     const tokenExp = jwtDecode<any>(token)?.exp || 0;
     const refreshExp = jwtDecode<any>(refresh)?.exp || 0;
-    if (checkIfExpired(tokenExp) && !checkIfExpired(refreshExp))
-      return refreshToken(refresh).then(() =>
-        Fetcher(url, {method, options, token})
-      );
+    if (!checkIfExpired(refreshExp)) {
+      if (checkIfExpired(tokenExp))
+        return refreshToken(refresh).then(() =>
+          Fetcher(url, {method, options, token})
+        );
+      else return Fetcher(url, {method, options, token});
+    }
   }
 
   async function logout() {
