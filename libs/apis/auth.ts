@@ -20,7 +20,7 @@ export const login = async (loginInfo: LoginInfo): Promise<Token> => {
 };
 
 export const logout = async (token: string): Promise<void> => {
-  await fetcher("/auth/logout", {}, { method: "delete", token });
+  await fetcher("/auth/logout", { method: "delete", token });
 };
 
 export const refresh = async (refreshToken: string, token?: string): Promise<Token> => {
