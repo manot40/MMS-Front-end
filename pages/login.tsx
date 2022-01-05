@@ -8,15 +8,15 @@ const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, token, login } = useAuth();
+  const { loading, user, loading } = useAuth();
   const { push, query } = useRouter();
 
   useEffect(() => {
-    if (token) {
+    if (user?._id) {
       query.redirect ? push(query.redirect as string) : push("/");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [push, token]);
+  }, [push, user]);
 
   const submitLogin = useCallback((e) => {
     e.preventDefault();
