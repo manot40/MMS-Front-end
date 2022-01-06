@@ -21,9 +21,8 @@ export const Toast: FC<ToastProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if(message) setIsOpen(true);
+    message ? setIsOpen(true) : setIsOpen(false);
     const timer = setTimeout(() => {
-      setIsOpen(false);
       close("");
     }, timeout);
 
@@ -53,7 +52,7 @@ export const Toast: FC<ToastProps> = ({
           </div>
           <div
             className="absolute right-0 cursor-pointer"
-            onClick={() => setIsOpen(false)}
+            onClick={() => close("")}
           >
             {/* @ts-ignore */}
             <ion-icon name="close" style={{ fontSize: "18px" }} />
