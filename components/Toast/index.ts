@@ -1,4 +1,4 @@
-import ToastContainer from './multi';
+// import ToastContainer from './multi';
 
 export * from './component';
 export default ToastContainer;
