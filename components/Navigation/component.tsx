@@ -23,7 +23,7 @@ const Component: FC = () => {
   }, [setTheme, theme]);
 
   return (
-    <header className="sticky z-20 w-full border-b backdrop-blur-md border-neutral-300 dark:border-neutral-600 -top-[4.35rem] md:-top-20">
+    <header className="sticky z-20 w-full border-b backdrop-blur border-neutral-300 dark:border-neutral-600 -top-[4rem] md:-top-16">
       <div className="absolute flex -z-10 w-full h-full opacity-80 bg-white dark:bg-black" />
       <Container className="flex items-center justify-between w-auto py-4">
         <Link passHref href="/">
@@ -34,30 +34,27 @@ const Component: FC = () => {
           </div>
         </Link>
         <div
-          className="hidden md:flex px-4 py-2 cursor-pointer transition-colors duration-300 hover:text-black hover:dark:text-white text-neutral-600 dark:text-neutral-400"
-          onClick={() => logout()}
+          className="flex space-x-2 cursor-pointer transition-colors duration-300 hover:text-black dark:hover:text-white"
+          onClick={toggleTheme}
         >
-          <span className="mr-4 self-center text-sm">{user?.name}</span>
-          <Image
-            src="https://github.com/manot40.png"
-            alt="Yeah"
-            width={28}
-            height={28}
-            className="rounded-full"
-          />
-        </div>
-        <div className="md:hidden cursor-pointer hover:text-black dark:hover:text-white">
-          {/** @ts-ignore */}
-          <ion-icon name="menu" size="large" />
+          <div className="w-8 h-8 py-1.5 mx-1 rounded sm:ml-4">
+            {mounted && (
+              // @ts-ignore
+              <ion-icon
+                name={theme === "light" ? "sunny" : "moon"}
+                style={{ fontSize: "21px" }}
+              />
+            )}
+          </div>
         </div>
       </Container>
       <Container
         className={clsx(
-          "flex items-center justify-between w-auto py-2 text-neutral-600 dark:text-neutral-400",
+          "flex relative justify-between items-center w-auto text-neutral-600 dark:text-neutral-400",
           width < 480 && "overflow-x-auto"
         )}
       >
-        <div className="flex items-center">
+        <div className="flex items-center py-3">
           <div className="submenu text-sm block md:flex space-x-4">
             <Link href="/">
               <a className={pathname === "/" ? "active" : ""}>Ringkasan</a>
@@ -79,22 +76,23 @@ const Component: FC = () => {
             </Link>
           </div>
         </div>
+        <div className="md:hidden cursor-pointer sticky right-0 bg-transaprent hover:text-black dark:hover:text-white">
+          <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-r from-transparent to-white dark:to-black" />
+          {/** @ts-ignore */}
+          <ion-icon class="bg-white dark:bg-black mt-1" name="menu" size="large" />
+        </div>
         <div
-          className="flex space-x-2 cursor-pointer transition-colors duration-300 hover:text-black dark:hover:text-white"
-          onClick={toggleTheme}
+          className="hidden md:flex px-4 py-2 cursor-pointer transition-colors duration-300 hover:text-black hover:dark:text-white text-neutral-600 dark:text-neutral-400"
+          onClick={() => logout()}
         >
-          <span className="text-sm self-center hidden md:block">
-            Tema {theme === "light" ? "Terang" : "Gelap"}
-          </span>
-          <div className="w-8 h-8 py-1.5 mx-1 rounded sm:ml-4">
-            {mounted && (
-              // @ts-ignore
-              <ion-icon
-                name={theme === "light" ? "sunny" : "moon"}
-                style={{ fontSize: "21px" }}
-              />
-            )}
-          </div>
+          <span className="mr-2 self-center text-sm">{user?.name}</span>
+          <Image
+            src="https://github.com/manot40.png"
+            alt="Yeah"
+            width={28}
+            height={28}
+            className="rounded-full"
+          />
         </div>
       </Container>
     </header>

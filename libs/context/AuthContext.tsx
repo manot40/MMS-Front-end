@@ -57,14 +57,11 @@ export default function AuthProvider({
 
   useEffect(() => {
     const refresh = localStorage.getItem("refreshToken");
+    if (error) setError(null);
+    if (pathname === "/login" && user) push("/");
     if (pathname !== "/login" && !user && !refresh)
       push("/login?redirect=" + pathname);
   }, [pathname]);
-
-  useEffect(() => {
-    if (error) setError(null);
-    if (pathname === "/login" && user) push("/");
-  }, [pathname, user]);
 
   async function refreshToken(refresh: string) {
     return authApi
