@@ -1,5 +1,5 @@
-import { User } from "libs/type";
-import fetcher from "libs/utils/fetcher";
+import axiosFetcher from "libs/utils/axiosFetcher";
+import { ResOK, User } from "type";
 
 interface IUserRegister {
   username: string;
@@ -10,11 +10,18 @@ interface IUserRegister {
 }
 
 export const getCurrentUser = async (token: string): Promise<User> => {
-  const { data } = await fetcher("/user/me", {token});
+  const { data } = await axiosFetcher<ResOK<User>>("/user/me", { token });
   return data;
-}
+};
 
-export const register = async (user: IUserRegister, token: string): Promise<User> => {
-  const { data } = await fetcher("/user/register", {method: "post", data: user, token});
+export const register = async (
+  user: IUserRegister,
+  token: string
+): Promise<User> => {
+  const { data } = await axiosFetcher<ResOK<User>>("/user/register", {
+    method: "post",
+    data: user,
+    token,
+  });
   return data;
-}
+};

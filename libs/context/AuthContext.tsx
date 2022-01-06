@@ -8,18 +8,18 @@ import {
   useState,
 } from "react";
 import dayjs from "dayjs";
-import { User } from "libs/type";
+import { User } from "type";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
 import * as userApi from "../apis/user";
 import * as authApi from "../apis/auth";
-import Fetcher, { IFetcher } from "libs/utils/fetcher";
+import axiosFetcher from "libs/utils/axiosFetcher";
 
 interface AuthContextType {
   user?: User;
   loading: boolean;
   error?: any;
-  fetcher: IFetcher;
+  fetcher: typeof axiosFetcher;
   logout: () => void;
   login: (
     username: string,
@@ -79,21 +79,27 @@ export default function AuthProvider({
       });
   }
 
-  async function fetcher(url: string, options = {}): Promise<any> {
-    if (loadingInitial) return;
-    const refresh = localStorage.getItem("refreshToken") || "";
-    const refreshExp = localStorage.getItem("refreshExpiration") || 0;
-    const tokenExp = jwtDecode<any>(token) || 0;
-    if (!isTokenExpire(refreshExp)) {
-      if (isTokenExpire(tokenExp))
-        return refreshToken(refresh).then(() =>
-          Fetcher(url, { ...options, token })
-        );
-      else return Fetcher(url, { ...options, token });
-    } else {
-      setUser(undefined);
-      push("/login?loggedOut=true");
+  async function fetcher<T = unknown>(
+    url: string,
+    options = {}
+  ): Promise<T> {
+    if (!loadingInitial) {
+      const refresh = localStorage.getItem("refreshToken") || "";
+      const refreshExp = localStorage.getItem("refreshExpiration") || 0;
+      const tokenExp = jwtDecode<any>(token) || 0;
+      if (!isTokenExpire(refreshExp)) {
+        if (isTokenExpire(tokenExp))
+          return refreshToken(refresh).then(() =>
+            axiosFetcher(url, { ...options, token })
+          );
+        else return axiosFetcher(url, { ...options, token });
+      } else {
+        setUser(undefined);
+        push("/login?loggedOut=true");
+        return Promise.reject("Refresh Token Expired")
+      }
     }
+    return Promise.reject({});
   }
 
   async function login(username: string, password: string, rememberMe = false) {

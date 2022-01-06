@@ -6,8 +6,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   label: string;
   value?: string | number;
   disabled?: boolean;
-  variant?: "default" | "outline" | "flat";
-  colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
+  variant?: Variant
+  colorScheme?: ColorScheme;
   custom?: string;
   onChange?: (e: any) => void;
 }

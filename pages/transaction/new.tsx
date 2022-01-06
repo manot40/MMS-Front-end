@@ -7,6 +7,7 @@ import { NextPage } from "next";
 import clsx from "clsx";
 import useSWR from "swr";
 import { useAuth } from "libs/context/AuthContext";
+import { ResOK } from "type";
 
 const NewTransaction: NextPage = () => {
   const { width } = useWindowSize();
@@ -17,8 +18,8 @@ const NewTransaction: NextPage = () => {
   const [date, setDate] = useState("");
 
   const { fetcher } = useAuth();
-  const { data: warehouseList } = useSWR("/warehouse", fetcher);
-  const { data: itemList } = useSWR(
+  const { data: warehouseList } = useSWR<ResOK<any>>("/warehouse", fetcher);
+  const { data: itemList } = useSWR<ResOK<any>>(
     warehouseList && warehouse ? `/item?warehouse=${warehouse}` : null,
     fetcher
   );

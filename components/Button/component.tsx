@@ -8,8 +8,8 @@ interface Props
   > {
   isLoading?: boolean;
   disabled?: boolean;
-  variant?: "default" | "outline" | "flat";
-  colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
+  variant?: Variant
+  colorScheme?: ColorScheme;
 }
 
 export const Component: FC<Props> = ({

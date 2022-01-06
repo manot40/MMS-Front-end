@@ -12,8 +12,8 @@ interface Props {
   labelKey?: string;
   placeholder: string;
   multiple?: boolean;
-  variant?: "default" | "outline" | "flat";
-  colorScheme?: "primary" | "danger" | "warning" | "success" | "info";
+  variant?: Variant
+  colorScheme?: ColorScheme;
   className?: string;
   options: Option[];
   value?: string | string[];
