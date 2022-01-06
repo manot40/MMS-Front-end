@@ -2,11 +2,13 @@
 import { useState, useCallback } from "react";
 import { Button, Input } from "components";
 import { useAuth } from "libs/context/AuthContext";
+import clsx from "clsx";
 import { useRouter } from "next/router";
 import { NextPage } from "next/types";
 
 const Home: NextPage = () => {
   const [username, setUsername] = useState("");
+  const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
 
   const { loading, login } = useAuth();
@@ -20,12 +22,31 @@ const Home: NextPage = () => {
     e.preventDefault();
     login(username, password, true).then(({error}) => {
       if (!error) redirect();
-      else console.log(error);
+      else setOpen(true);
     });
   }, [login, password, username]);
 
   return (
     <div className="container mx-auto max-w-xs h-screen flex items-center -m-8">
+      <div onClick={() => setOpen(false)} className={clsx(
+        "p-4 bg-red-200 text-red-800 border rounded-2xl fixed w-11/12 left-1/2 bottom-5 -translate-x-1/2 transition-all duration-300",
+        open ? "" : "-bottom-0 translate-y-full"
+      )}>
+        <div className="relative flex">
+          <div className="self-start mr-4 h-fit">
+            {/* @ts-ignore */}
+            <ion-icon name="close-circle-outline" style={{fontSize: "18px"}} />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="font-bold">Error</h1>
+            <p className="text-sm">Username atau password salah!</p>
+          </div>
+          <div className="absolute right-0 cursor-pointer">
+            {/* @ts-ignore */}
+            <ion-icon name="close" style={{fontSize: "18px"}} />
+          </div>
+        </div>
+      </div>
       <div className="w-full">
         <div className="font-display font-bold text-3xl mb-14 tracking-wide">
           <span className="underline underline-4 underline-offset-8">
@@ -57,7 +78,7 @@ const Home: NextPage = () => {
             />
             <label htmlFor="test" className="text-xs ml-4 mb-2">Remember Me</label>
           </div>
-          <Button className="w-full" isLoading={loading as boolean} onClick={submitLogin}>Submit</Button>
+          <Button className="w-full" isLoading={loading ? true : false} onClick={submitLogin}>Submit</Button>
         </form>
       </div>
     </div>

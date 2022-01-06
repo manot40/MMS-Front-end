@@ -17,7 +17,7 @@ import axiosFetcher from "libs/utils/axiosFetcher";
 
 interface AuthContextType {
   user?: User;
-  loading: boolean;
+  loading: string;
   error?: any;
   fetcher: typeof axiosFetcher;
   logout: () => void;
@@ -42,7 +42,7 @@ export default function AuthProvider({
   const [user, setUser] = useState<User>();
   const [token, setToken] = useState<string>("");
   const [error, setError] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<string>("");
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
 
   const { pathname, push } = useRouter();
@@ -58,7 +58,7 @@ export default function AuthProvider({
   useEffect(() => {
     const refresh = localStorage.getItem("refreshToken");
     if (error) setError(null);
-    if (loading) setLoading(false);
+    if (loading) setLoading("");
     if (pathname === "/login" && refresh) push("/");
     if (pathname !== "/login" && !refresh)
       push("/login?redirect=" + pathname);
@@ -97,14 +97,14 @@ export default function AuthProvider({
       } else {
         setUser(undefined);
         push("/login?loggedOut=true");
-        return Promise.reject("Refresh Token Expired")
+        return Promise.reject({message: "Refresh Token Expired"})
       }
     }
-    return Promise.reject({});
+    return Promise.reject({message: "no"});
   }
 
   async function login(username: string, password: string, rememberMe = false) {
-    setLoading(true);
+    setLoading("login");
     return await authApi
       .login({ username, password, rememberMe })
       .then(async ({ accessToken, refreshToken }) => {
@@ -121,7 +121,7 @@ export default function AuthProvider({
         setError(error);
         return { success: false, error };
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoading(""));
   }
 
   async function logout() {
