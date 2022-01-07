@@ -17,7 +17,7 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
   const [list, setList] = useState<List[]>([] as List[]);
 
   useEffect(() => {
-    if (content.message) {
+    if (content) {
       const newToast = { ...content, isOpen: true, id: Date.now().toString() } as List;
       if (noMultiple || list.length >= 3) setList([newToast]);
       else setList([...list, newToast]);
@@ -47,7 +47,7 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
   };
 
   return (
-    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z=[9999] -translate-x-1/2 translate-y-0 left-1/2 bottom-5 md:bottom-auto md:top-8 transition-all">
+    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z=[9999] -translate-x-1/2 translate-y-0 left-1/2 bottom-5 md:bottom-auto md:top-8 transition-transform duration-300">
       {list[0].message && list.map((toast) => (
         <div
           key={toast.id}
