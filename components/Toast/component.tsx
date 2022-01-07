@@ -47,13 +47,13 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
   };
 
   return (
-    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z=[9999] -translate-x-1/2 left-1/2 bottom-5 md:bottom-auto md:top-8">
-      {list.map((toast) => (
+    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z=[9999] -translate-x-1/2 translate-y-0 left-1/2 bottom-5 md:bottom-auto md:top-8 transition-all">
+      {list[0].message && list.map((toast) => (
         <div
           key={toast.id}
           className={clsx(
-            "bg-red-200 dark:bg-red-300 text-red-800 p-4 rounded-2xl w-full transition-all duration-300 opacity-100 animate-slideInUp md:animate-slideInDown",
-            !toast.isOpen && "-bottom-0 translate-y-full md:bottom-auto md:top-0 md:-translate-y-full opacity-20"
+            "bg-red-200 dark:bg-red-300 text-red-800 p-4 rounded-2xl w-full transition-all duration-300 animate-slideInUp md:animate-slideInDown",
+            !toast.isOpen && "-bottom-0 translate-y-full md:bottom-auto md:top-0 md:-translate-y-full opacity-30"
           )}
         >
           <div className="relative flex">
