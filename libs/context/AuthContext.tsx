@@ -117,9 +117,8 @@ export default function AuthProvider({
         await userApi.getCurrentUser(accessToken).then(setUser);
         return { success: true };
       })
-      .catch((error) => {
-        setError(error);
-        return { success: false, error };
+      .catch((err) => {
+        return err.data;
       })
       .finally(() => setLoading(""));
   }
