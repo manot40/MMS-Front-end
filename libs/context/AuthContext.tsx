@@ -25,7 +25,7 @@ interface AuthContextType {
     username: string,
     password: string,
     rememberMe: boolean
-  ) => Promise<{ success: boolean; error?: string }>;
+  ) => Promise<{ success: boolean; message?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
