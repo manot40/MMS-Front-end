@@ -8,7 +8,7 @@ import { NextPage } from "next/types";
 const Home: NextPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [toasts, setToasts] = useState<ToastOpt>({} as ToastOpt);
 
   const { loading, login } = useAuth();
   const { push, query } = useRouter();
@@ -17,13 +17,28 @@ const Home: NextPage = () => {
     query.redirect ? push(query.redirect as string) : push("/");
   }
 
-  const submitLogin = useCallback((e) => {
-    e.preventDefault();
-    login(username, password, true).then(({error}) => {
-      if (!error) redirect();
-      else setMessage("Username atau password salah!");
-    });
-  }, [login, password, username]);
+  const submitLogin = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (username && password) {
+        login(username, password, true).then(({ error }) => {
+          if (!error) redirect();
+          else setToasts({
+            title: "Error",
+            message: "Username atau password salah!",
+            type: "error",
+          });
+        });
+      } else {
+        setToasts({
+          title: "Error",
+          message: "Username atau password tidak boleh kosong!",
+          type: "error",
+        });
+      }
+    },
+    [login, password, username]
+  );
 
   return (
     <div className="container mx-auto max-w-xs h-screen flex items-center -m-8">
@@ -51,17 +66,21 @@ const Home: NextPage = () => {
             className="mb-4 text-sm dark:border-none"
           />
           <div className="flex ml-1 mb-8">
-            <input
-              id="test"
-              className="checkbox"
-              type="checkbox"
-            />
-            <label htmlFor="test" className="text-xs ml-4 mb-2">Remember Me</label>
+            <input id="test" className="checkbox" type="checkbox" />
+            <label htmlFor="test" className="text-xs ml-4 mb-2">
+              Remember Me
+            </label>
           </div>
-          <Button className="w-full" isLoading={loading ? true : false} onClick={submitLogin}>Submit</Button>
+          <Button
+            className="w-full"
+            isLoading={loading ? true : false}
+            onClick={submitLogin}
+          >
+            Submit
+          </Button>
         </form>
       </div>
-      <Toast message={message} title="Error!" close={setMessage} />
+      <Toast content={toasts} timeout={3000} />
     </div>
   );
 };
