@@ -4,7 +4,6 @@ import { BaseLayout } from 'layout'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 
-import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
 
 function App({ Component, pageProps }: AppProps) {

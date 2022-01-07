@@ -1,4 +1,4 @@
-export type Obj = { [key: string]: any }
+export type Obj = { [key: string]: any };
 
 type User = {
   _id: string;
@@ -9,7 +9,7 @@ type User = {
   affiliation: string;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export interface ResOK<Data = unknown> {
   success: true;
@@ -31,3 +31,19 @@ export type AxiosMethod =
   | "post"
   | "put"
   | "patch";
+
+export type Item = {
+  _id: string;
+  name: string;
+  sku: string;
+  user: {
+    _id: string;
+    name: string;
+  };
+  unit: string;
+  type: "chemical" | "consumable";
+  bufferStock: number;
+  warehouse: any[];
+  createdAt: string;
+  updatedAt: string;
+};

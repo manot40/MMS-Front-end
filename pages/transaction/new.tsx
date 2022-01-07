@@ -1,31 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Input, Select, Button } from "components";
 import { useCallback, useEffect, useState } from "react";
 import { useWindowSize } from "libs/hooks/useWindowSize";
+import { useAuth } from "libs/context/AuthContext";
+import { Input, Select, Button, Toast } from "components";
+import { Item, ResOK } from "type";
 import { Dashboard } from "layout";
 import { NextPage } from "next";
-import clsx from "clsx";
+import dayjs from "dayjs";
 import useSWR from "swr";
-import { useAuth } from "libs/context/AuthContext";
-import { ResOK } from "type";
+import clsx from "clsx";
 
 const NewTransaction: NextPage = () => {
   const { width } = useWindowSize();
-  const [tableData, setTableData] = useState(defaultData(3));
-  const [warehouse, setWarehouse] = useState("");
+  const [toast, setToast] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [type, setType] = useState("");
-  const [desc, setDesc] = useState("");
-  const [date, setDate] = useState("");
+  const [warehouse, setWarehouse] = useState("");
+  const [desc, setDesc] = useState(`Transaksi ${dayjs().format("DD MMMM")}`);
+  const [items, setItems] = useState(defaultData(2));
 
   const { fetcher } = useAuth();
   const { data: warehouseList } = useSWR<ResOK<any>>("/warehouse", fetcher);
-  const { data: itemList } = useSWR<ResOK<any>>(
+  const { data: itemList } = useSWR<ResOK<Item[]>>(
     warehouseList && warehouse ? `/item?warehouse=${warehouse}` : null,
     fetcher
   );
 
   useEffect(() => {
-    setTableData([...defaultData(tableData.length)]);
+    setItems([...defaultData(items.length)]);
   }, [warehouse]);
 
   function defaultData(count = 1) {
@@ -40,36 +44,73 @@ const NewTransaction: NextPage = () => {
   const itemChanged = useCallback<(val: string, idx: number) => void>(
     (val, idx) => {
       if (val) {
-        const newData = [...tableData];
+        const newData = [...items];
         newData[idx] = { item: val, quantity: newData[idx].quantity };
-        setTableData(newData);
+        setItems(newData);
       }
     },
-    [tableData]
+    [items]
   );
+
+  const handleSubmit = () => {
+    if (!items.find((item) => !item.item || item.quantity < 1)) {
+      setIsLoading(true);
+      fetcher<any>("/transaction", {
+        method: "post",
+        data: {
+          txDate: date,
+          description: desc,
+          type,
+          warehouse,
+          items: items,
+        },
+      })
+        .then(() => {
+          setToast({
+            type: "success",
+            message: "Transaksi berhasil dibuat",
+          });
+        })
+        .catch(({ response }) => {
+          setToast({
+            type: "error",
+            message: response.data.message,
+          });
+        })
+        .finally(() => {
+          setItems(defaultData(2));
+          setIsLoading(false);
+        });
+    } else {
+      setToast({
+        type: "error",
+        message: "Semua item dan quantity harus diisi",
+      });
+    }
+  };
 
   const deleteRow = useCallback(
     (idx) => {
-      const newData = [...tableData];
+      const newData = [...items];
       newData.splice(idx, 1);
-      setTableData(newData);
+      setItems(newData);
     },
-    [tableData]
+    [items]
   );
 
   const addRow = useCallback(() => {
-    const newData = [...tableData];
+    const newData = [...items];
     newData.push(defaultData()[0]);
-    setTableData(newData);
-  }, [tableData]);
+    setItems(newData);
+  }, [items]);
 
   const onQuantityChanged = useCallback(
     (val, idx) => {
-      const newData = [...tableData];
+      const newData = [...items];
       newData[idx].quantity = val;
-      setTableData(newData);
+      setItems(newData);
     },
-    [tableData]
+    [items]
   );
 
   return (
@@ -137,7 +178,7 @@ const NewTransaction: NextPage = () => {
               </tr>
             </thead>
             <tbody>
-              {tableData.map((data, idx) => (
+              {items.map((data, idx) => (
                 <tr key={idx}>
                   <td className="w-56 md:w-1/2">
                     <Select
@@ -153,8 +194,9 @@ const NewTransaction: NextPage = () => {
                   </td>
                   <td>
                     <p>
-                      {(Array.isArray(itemList) &&
-                        itemList.find((val) => val.id === data.item)?.unit) ||
+                      {(itemList?.data &&
+                        itemList.data.find((val) => val._id === data.item)
+                          ?.unit) ||
                         "-"}
                     </p>
                   </td>
@@ -172,10 +214,7 @@ const NewTransaction: NextPage = () => {
                     <Button
                       tabIndex={-1}
                       onClick={() => deleteRow(idx)}
-                      className={clsx(
-                        "danger",
-                        tableData.length === 1 && "hidden"
-                      )}
+                      className={clsx("danger", items.length === 1 && "hidden")}
                     >
                       Hapus
                     </Button>
@@ -195,8 +234,9 @@ const NewTransaction: NextPage = () => {
         </div>
         <div className="flex justify-end my-8 space-x-2">
           <Button
+            isLoading={isLoading}
             className="w-full md:w-1/4"
-            onClick={() => alert(JSON.stringify(tableData))}
+            onClick={handleSubmit}
           >
             Submit
           </Button>
@@ -205,6 +245,7 @@ const NewTransaction: NextPage = () => {
           </Button>
         </div>
       </div>
+      <Toast content={toast} noMultiple />
     </Dashboard>
   );
 };

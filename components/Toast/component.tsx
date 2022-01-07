@@ -50,7 +50,7 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
   };
 
   return (
-    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z=[9999] -translate-x-1/2 left-1/2 bottom-5 md:bottom-auto md:top-8">
+    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z-[9999] -translate-x-1/2 left-1/2 bottom-5 md:bottom-auto md:top-8">
       {list.map((toast) => (
         <div
           key={toast.id}

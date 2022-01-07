@@ -4,7 +4,7 @@ import { Chevron } from "./Chevron";
 import { filterArray, prettyString } from "libs/utils";
 import { FC, useCallback, useState, useEffect, useRef, memo } from "react";
 
-type Option = { [key: string]: string };
+type Option = { [key: string]: any };
 
 interface Props {
   labelHtml?: string;
@@ -220,7 +220,7 @@ const SelectComponent: FC<Props> = ({
           </span>
         </div>
         <div
-          className={clsx("options", !isOpen && "-translate-y-2 invisible")}
+          className={clsx("options", !isOpen ? "-translate-y-3 invisible opacity-0" : "translate-y-0 visible opacity-100")}
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
         >

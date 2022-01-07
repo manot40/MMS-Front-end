@@ -18,7 +18,6 @@ import axiosFetcher from "libs/utils/axiosFetcher";
 interface AuthContextType {
   user?: User;
   loading: string;
-  error?: any;
   fetcher: typeof axiosFetcher;
   logout: () => void;
   login: (
@@ -41,7 +40,6 @@ export default function AuthProvider({
 }): JSX.Element {
   const [user, setUser] = useState<User>();
   const [token, setToken] = useState<string>("");
-  const [error, setError] = useState<any>();
   const [loading, setLoading] = useState<string>("");
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
 
@@ -57,11 +55,9 @@ export default function AuthProvider({
 
   useEffect(() => {
     const refresh = localStorage.getItem("refreshToken");
-    if (error) setError(null);
     if (loading) setLoading("");
     if (pathname === "/login" && refresh) push("/");
-    if (pathname !== "/login" && !refresh)
-      push("/login?redirect=" + pathname);
+    if (pathname !== "/login" && !refresh) push("/login?redirect=" + pathname);
   }, [pathname]);
 
   async function refreshToken(refresh: string) {
@@ -72,7 +68,7 @@ export default function AuthProvider({
         userApi
           .getCurrentUser(accessToken)
           .then((user) => setUser(user))
-          .catch((err) => setError(err));
+          .catch(() => {});
       })
       .catch((_error) => {
         window.localStorage.clear();
@@ -80,10 +76,7 @@ export default function AuthProvider({
       });
   }
 
-  async function fetcher<T = unknown>(
-    url: string,
-    options = {}
-  ): Promise<T> {
+  async function fetcher<T = unknown>(url: string, options = {}): Promise<T> {
     if (!loadingInitial) {
       const refresh = localStorage.getItem("refreshToken") || "";
       const refreshExp = localStorage.getItem("refreshExpiration") || 0;
@@ -97,10 +90,10 @@ export default function AuthProvider({
       } else {
         setUser(undefined);
         push("/login?loggedOut=true");
-        return Promise.reject({message: "Refresh Token Expired"})
+        return Promise.reject({ message: "Refresh Token Expired" });
       }
     }
-    return Promise.reject({message: "no"});
+    return Promise.reject({ message: "no" });
   }
 
   async function login(username: string, password: string, rememberMe = false) {
@@ -118,7 +111,12 @@ export default function AuthProvider({
         return { success: true };
       })
       .catch((err) => {
-        return err.data;
+        return err.response
+          ? err.response.data
+          : {
+              success: false,
+              message: "Server sedang bermasalah, mohon coba lagi nanti",
+            };
       })
       .finally(() => setLoading(""));
   }
@@ -131,7 +129,9 @@ export default function AuthProvider({
         window && window.localStorage.clear();
         push("/login");
       })
-      .catch((error) => setError(error));
+      .catch((err) => {
+        return err.response.data;
+      });
   }
 
   function isTokenExpire(exp: string | number) {
@@ -142,12 +142,11 @@ export default function AuthProvider({
     () => ({
       user,
       loading,
-      error,
       login,
       fetcher,
       logout,
     }),
-    [user, loading, error]
+    [user, loading]
   );
 
   return (
