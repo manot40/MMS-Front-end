@@ -21,11 +21,11 @@ const Home: NextPage = () => {
     (e) => {
       e.preventDefault();
       if (username && password) {
-        login(username, password, true).then(({ error }) => {
-          if (!error) redirect();
+        login(username, password, true).then((data) => {
+          if (data.success) redirect();
           else setToasts({
             title: "Error",
-            message: "Username atau password salah!",
+            message: data.message,
             type: "error",
           });
         });
