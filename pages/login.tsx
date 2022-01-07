@@ -25,7 +25,7 @@ const Home: NextPage = () => {
           if (data.success) redirect();
           else setToasts({
             title: "Error",
-            message: data.message,
+            message: data.message || "Login gagal",
             type: "error",
           });
         });
