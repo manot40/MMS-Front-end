@@ -17,9 +17,13 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
   const [list, setList] = useState<List[]>([] as List[]);
 
   useEffect(() => {
-    if (content) {
-      const newToast = { ...content, isOpen: true, id: Date.now().toString() } as List;
-      if (noMultiple || list.length >= 3) setList([newToast]);
+    const newToast = { ...content, isOpen: true, id: Date.now().toString() } as List;
+    if (Object.keys(content).length) {
+      if (noMultiple) setList([newToast]);
+      else if (list.length > 1) {
+        closeToast(list[0].id);
+        setTimeout(() => setList([...list, newToast]), 300);
+      }
       else setList([...list, newToast]);
     }
   // eslint-disable-next-line
@@ -29,7 +33,6 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
     const interval = setInterval(() => {
       if (list.length) closeToast(list[0].id);
     }, timeout);
-    
     return () => clearInterval(interval);
     // eslint-disable-next-line
   }, [list, timeout, content]);
@@ -47,12 +50,17 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
   };
 
   return (
-    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z=[9999] -translate-x-1/2 translate-y-0 left-1/2 bottom-5 md:bottom-auto md:top-8 transition-transform duration-300">
+    <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z=[9999] -translate-x-1/2 left-1/2 bottom-5 md:bottom-auto md:top-8">
       {list.map((toast) => (
         <div
           key={toast.id}
           className={clsx(
-            "bg-red-200 dark:bg-red-300 text-red-800 p-4 rounded-2xl w-full transition-all duration-300 animate-slideInUp md:animate-slideInDown",
+            "p-4 rounded-2xl w-full transition-all duration-300 animate-slideInUp md:animate-slideInDown",
+            toast.type === "error" && "bg-red-200 dark:bg-red-300 text-red-800",
+            toast.type === "success" && "bg-green-200 dark:bg-green-300 text-green-800",
+            toast.type === "info" && "bg-blue-200 dark:bg-[#81D4FA] text-[#01579B]",
+            toast.type === "warning" && "bg-yellow-200 dark:bg-[#FFF59D] text-yellow-800",
+            !toast.type && "bg-white border dark:bg-black text-neutral-800 dark:text-neutral-200 dark:border-neutral-700",
             !toast.isOpen && "-bottom-0 translate-y-full md:bottom-auto md:top-0 md:-translate-y-full opacity-30"
           )}
         >
