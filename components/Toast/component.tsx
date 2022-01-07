@@ -17,9 +17,11 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
   const [list, setList] = useState<List[]>([] as List[]);
 
   useEffect(() => {
-    const newToast = { ...content, isOpen: true, id: Date.now().toString() } as List;
-    if (noMultiple || list.length >= 3) setList([newToast]);
-    else setList([...list, newToast]);
+    if (content.message) {
+      const newToast = { ...content, isOpen: true, id: Date.now().toString() } as List;
+      if (noMultiple || list.length >= 3) setList([newToast]);
+      else setList([...list, newToast]);
+    }
   // eslint-disable-next-line
   }, [content]);
 
@@ -50,8 +52,8 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
         <div
           key={toast.id}
           className={clsx(
-            "bg-red-200 dark:bg-red-300 text-red-800 p-4 rounded-2xl w-full transition-all duration-300 animate-slideInUp md:animate-slideInDown",
-            !toast.isOpen && "-bottom-0 translate-y-full md:bottom-auto md:top-0 md:-translate-y-full opacity-30"
+            "bg-red-200 dark:bg-red-300 text-red-800 p-4 rounded-2xl w-full transition-all duration-300 opacity-100 animate-slideInUp md:animate-slideInDown",
+            !toast.isOpen && "-bottom-0 translate-y-full md:bottom-auto md:top-0 md:-translate-y-full opacity-20"
           )}
         >
           <div className="relative flex">
