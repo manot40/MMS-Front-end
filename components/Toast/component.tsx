@@ -49,39 +49,57 @@ export const Toast: FC<ToastProps> = (props): JSX.Element => {
     }, 300);
   };
 
+  const iconType = (type: string) => {
+    switch (type) {
+      case "success":
+        return "checkmark";
+      case "warning":
+        return "alert";
+      case "error":
+        return "close";
+      default:
+        return "information";
+    }
+  }
+
   return (
     <div className="fixed select-none space-y-2 w-11/12 md:w-[21rem] z-[9999] -translate-x-1/2 left-1/2 bottom-5 md:bottom-auto md:top-8">
       {list.map((toast) => (
         <div
           key={toast.id}
           className={clsx(
-            "p-4 rounded-2xl w-full transition-all duration-300 animate-slideInUp md:animate-slideInDown",
-            toast.type === "error" && "bg-red-200 dark:bg-red-300 text-red-800",
-            toast.type === "success" && "bg-green-200 dark:bg-green-300 text-green-800",
-            toast.type === "info" && "bg-blue-200 dark:bg-[#81D4FA] text-[#01579B]",
-            toast.type === "warning" && "bg-yellow-200 dark:bg-[#FFF59D] text-yellow-800",
-            !toast.type && "bg-white border dark:bg-black text-neutral-800 dark:text-neutral-200 dark:border-neutral-700",
+            "p-3 rounded-2xl w-full transition-all duration-300 animate-slideInUp md:animate-slideInDown",
+            toast.type === "error"
+              ? "bg-red-200 dark:bg-red-300 text-red-800"
+              : toast.type === "success"
+              ? "bg-green-200 dark:bg-green-300 text-green-800"
+              : toast.type === "info"
+              ? "bg-blue-200 dark:bg-[#81D4FA] text-[#01579B]"
+              : toast.type === "warning"
+              ? "bg-yellow-200 dark:bg-[#FFF59D] text-yellow-800"
+              : "border bg-white dark:bg-black text-neutral-800 dark:text-neutral-200 dark:border-neutral-700",
             !toast.isOpen && "-bottom-0 translate-y-full md:bottom-auto md:top-0 md:-translate-y-full opacity-30"
           )}
+          onClick={() => closeToast(toast.id)}
         >
-          <div className="relative flex">
-            <div className="self-start mr-4 h-fit">
+          <div className="relative flex space-x-3">
+            <div className="flex">
               {/* @ts-ignore */}
               <ion-icon
-                name="close-circle-outline"
-                style={{ fontSize: "18px" }}
+                name={`${iconType(toast.type || "")}-circle-outline`}
+                style={{ fontSize: "24px", alignSelf: "center" }}
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col self-center">
               <h1 className="font-bold">{toast.title}</h1>
               <p className="text-sm">{toast.message}</p>
             </div>
             <div
-              className="absolute right-0 cursor-pointer"
+              className="absolute right-0 cursor-pointer max-h-2"
               onClick={() => closeToast(toast.id)}
             >
               {/* @ts-ignore */}
-              <ion-icon name="close" style={{ fontSize: "18px" }} />
+              {toast.title && <ion-icon name="close" style={{ fontSize: "20px" }} />}
             </div>
           </div>
         </div>

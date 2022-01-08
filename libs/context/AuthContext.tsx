@@ -17,7 +17,7 @@ import axiosFetcher from "libs/utils/axiosFetcher";
 
 interface AuthContextType {
   user?: User;
-  loading: string;
+  loading: boolean;
   fetcher: typeof axiosFetcher;
   logout: () => void;
   login: (
@@ -40,7 +40,7 @@ export default function AuthProvider({
 }): JSX.Element {
   const [user, setUser] = useState<User>();
   const [token, setToken] = useState<string>("");
-  const [loading, setLoading] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
 
   const { pathname, push } = useRouter();
@@ -55,7 +55,7 @@ export default function AuthProvider({
 
   useEffect(() => {
     const refresh = localStorage.getItem("refreshToken");
-    if (loading) setLoading("");
+    if (loading) setLoading(false);
     if (pathname === "/login" && refresh) push("/");
     if (pathname !== "/login" && !refresh) push("/login?redirect=" + pathname);
   }, [pathname]);
@@ -97,7 +97,7 @@ export default function AuthProvider({
   }
 
   async function login(username: string, password: string, rememberMe = false) {
-    setLoading("login");
+    setLoading(true);
     return await authApi
       .login({ username, password, rememberMe })
       .then(async ({ accessToken, refreshToken }) => {
@@ -118,7 +118,7 @@ export default function AuthProvider({
               message: "Server sedang bermasalah, mohon coba lagi nanti",
             };
       })
-      .finally(() => setLoading(""));
+      .finally(() => setLoading(false));
   }
 
   async function logout() {

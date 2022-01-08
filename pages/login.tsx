@@ -73,7 +73,7 @@ const Home: NextPage = () => {
           </div>
           <Button
             className="w-full"
-            isLoading={loading ? true : false}
+            isLoading={loading}
             onClick={submitLogin}
           >
             Submit

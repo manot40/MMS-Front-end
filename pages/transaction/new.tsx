@@ -84,7 +84,7 @@ const NewTransaction: NextPage = () => {
     } else {
       setToast({
         type: "error",
-        message: "Semua item dan quantity harus diisi",
+        message: "Barang dan jumlah tidak boleh kosong",
       });
     }
   };
