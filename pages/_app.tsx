@@ -12,6 +12,7 @@ function App({ Component, pageProps }: AppProps) {
       <Script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"/>
       <Script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" noModule />
       <Head>
+        <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
         <title>MMS Frontend - Next (Dev)</title>
       </Head>
       <BaseLayout>

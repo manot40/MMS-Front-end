@@ -126,7 +126,8 @@ export default function AuthProvider({
       .logout(token)
       .then(() => {
         setUser(undefined);
-        window && window.localStorage.clear();
+        window && window.localStorage.removeItem("refreshToken"),
+          window.localStorage.removeItem("refreshExpiration");
         push("/login");
       })
       .catch((err) => {
