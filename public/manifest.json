@@ -1,5 +1,6 @@
 {
   "name": "MMS Frontend",
+  "display": "standalone",
   "short_name": "MMS App",
   "icons": [
     {
@@ -19,7 +20,5 @@
     }
   ],
   "start_url": "/",
-  "theme_color": "#000000",
-  "background_color": "#262626",
   "orientation": "portrait"
 }
