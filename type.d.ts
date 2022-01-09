@@ -15,6 +15,8 @@ export interface ResOK<Data = unknown> {
   success: true;
   data: Data;
   message: string;
+  totalPages?: number;
+  itemCount?: number;
 }
 
 export interface ResFail {
@@ -44,6 +46,24 @@ export type Item = {
   type: "chemical" | "consumable";
   bufferStock: number;
   warehouse: any[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Transaction = {
+  _id: string;
+  txId: string;
+  name: string;
+  user: {
+    _id: string;
+    name: string;
+  };
+  status: string;
+  type: "in" | "out";
+  bufferStock: number;
+  warehouse: { _id: string; name: string };
+  items: [{ item: { _id: string; name: string }; quantity: number }];
+  txDate: string;
   createdAt: string;
   updatedAt: string;
 };
