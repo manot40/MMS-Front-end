@@ -15,6 +15,8 @@ export interface ResOK<Data = unknown> {
   success: true;
   data: Data;
   message: string;
+  totalPages?: number;
+  itemCount?: number;
 }
 
 export interface ResFail {
