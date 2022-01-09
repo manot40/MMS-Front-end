@@ -96,8 +96,8 @@
   .table-parent td {
     @apply p-4 border-b border-neutral-300 dark:border-neutral-700
   }
-  .table-parent>tbody>tr:last-child>td {
-    @apply border-b-0
+  .table-parent>tbody>tr:first-child>td {
+    @apply border-t-0
   }
   .table-parent th {
     @apply p-4
@@ -116,6 +116,21 @@
   }
   .table-parent>tbody>tr>td {
     @apply text-sm
+  }
+  .pagination {
+    @apply flex justify-center space-x-2 items-center
+  }
+  .pagination>button {
+    @apply bg-white dark:bg-black text-neutral-600 dark:text-neutral-400 text-sm h-8 w-8 rounded-lg border dark:border-none
+  }
+  .pagination>button:hover {
+    @apply bg-neutral-200 dark:bg-neutral-700
+  }
+  .pagination>button.disabled {
+    @apply opacity-50 cursor-not-allowed hover:bg-black
+  }
+  .pagination>button.active {
+    @apply bg-neutral-500 dark:bg-neutral-100 text-white dark:text-black
   }
 }
 

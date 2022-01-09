@@ -49,3 +49,21 @@ export type Item = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Transaction = {
+  _id: string;
+  txId: string;
+  name: string;
+  user: {
+    _id: string;
+    name: string;
+  };
+  status: string;
+  type: "in" | "out";
+  bufferStock: number;
+  warehouse: { _id: string; name: string };
+  items: [{ item: { _id: string; name: string }; quantity: number }];
+  txDate: string;
+  createdAt: string;
+  updatedAt: string;
+};
