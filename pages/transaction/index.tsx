@@ -13,20 +13,23 @@ const Transaction: NextPage = () => {
   const [page, setPage] = useState(1);
   const { fetcher } = useAuth();
 
-  const { data: trx } = useSWR<ResOK<Transaction[]>>(
-    `/transaction?page=${page}&limit=${10}&sort=txDate&sortby=desc`,
-    fetcher
-  );
+  const Transactions = () => {
+    const { data } = useSWR<ResOK<Transaction[]>>(
+      `/transaction?page=${page}&limit=${10}&sort=txDate&order=desc`,
+      fetcher
+    );
+    return data ? data : { data: [], totalPages: 0 };
+  };
 
-  const tableData = trx?.data.map((item) => ({
+  const tableData = Transactions().data.map((item) => ({
     Kode: item.txId,
     Tanggal: dayjs(item.txDate).format("DD MMM YYYY"),
     Gudang: item.warehouse.name,
     Tipe: item.type.toUpperCase(),
   }));
-  console.log(trx);
+
   const { currentPage, pages, changePage } = usePagination({
-    totalPages: trx?.totalPages || 1,
+    totalPages: Transactions().totalPages || 1,
   });
 
   function handleChangePage(page: number) {
@@ -50,7 +53,7 @@ const Transaction: NextPage = () => {
       <Pagination
         page={currentPage}
         pages={pages}
-        totalPages={trx?.totalPages || 1}
+        totalPages={Transactions().totalPages || 1}
         onPageChange={handleChangePage}
         className="py-4 mb-8 self-center"
       />
