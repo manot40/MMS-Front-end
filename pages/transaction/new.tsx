@@ -11,6 +11,7 @@ import useSWR from "swr";
 import clsx from "clsx";
 
 const NewTransaction: NextPage = () => {
+  const { fetcher } = useAuth();
   const { width } = useWindowSize();
   const [toast, setToast] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -21,12 +22,18 @@ const NewTransaction: NextPage = () => {
   const [desc, setDesc] = useState(`Transaksi ${dayjs().format("DD MMMM")}`);
   const [items, setItems] = useState(defaultData(2));
 
-  const { fetcher } = useAuth();
-  const { data: warehouseList } = useSWR<ResOK<any>>("/warehouse", fetcher);
-  const { data: itemList } = useSWR<ResOK<Item[]>>(
-    warehouseList && warehouse ? `/item?warehouse=${warehouse}` : null,
-    fetcher
-  );
+  const Warehouses = () => {
+    const { data } = useSWR<ResOK<any>>("/warehouse", fetcher);
+    return data ? data : { data: [] };
+  };
+
+  const Items = () => {
+    const { data } = useSWR<ResOK<Item[]>>(
+      warehouse ? `/item?warehouse=${warehouse}` : null,
+      fetcher
+    );
+    return data ? data : { data: [] };
+  };
 
   useEffect(() => {
     setItems([...defaultData(items.length)]);
@@ -148,7 +155,7 @@ const NewTransaction: NextPage = () => {
             placeholder="Pilih Gudang"
             className="w-44 min-w-fit"
             required
-            options={warehouseList ? warehouseList.data : []}
+            options={Warehouses().data}
             idKey="_id"
             labelKey="name"
             onChange={(val) => setWarehouse(val as string)}
@@ -188,14 +195,14 @@ const NewTransaction: NextPage = () => {
                       value={data.item}
                       idKey="_id"
                       labelKey="name"
-                      options={itemList ? itemList.data : []}
+                      options={Items().data}
                       onChange={(val) => itemChanged(val as string, idx)}
                     />
                   </td>
                   <td>
                     <p>
-                      {(itemList?.data &&
-                        itemList.data.find((val) => val._id === data.item)
+                      {(Items().data.length &&
+                        Items().data.find((val) => val._id === data.item)
                           ?.unit) ||
                         "-"}
                     </p>
