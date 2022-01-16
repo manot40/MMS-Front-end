@@ -10,7 +10,7 @@ interface Props {
 
 export const Table: FC<Props> = (props) => {
   const { data, footer, onChange } = props;
-  const columns = Object.keys(data[0]);
+  const columns = Object.keys(data[0] || { "": "Loading..." });
   return (
     <table className="table-parent" style={{ borderSpacing: 0 }}>
       <thead>

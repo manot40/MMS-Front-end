@@ -27,13 +27,10 @@ const NewTransaction: NextPage = () => {
     return data ? data : { data: [] };
   };
 
-  const Items = () => {
-    const { data } = useSWR<ResOK<Item[]>>(
-      warehouse ? `/item?warehouse=${warehouse}` : null,
-      fetcher
-    );
-    return data ? data : { data: [] };
-  };
+  const { data: Items } = useSWR<ResOK<Item[]>>(
+    warehouse ? `/item?warehouse=${warehouse}` : null,
+    fetcher
+  );
 
   useEffect(() => {
     setItems([...defaultData(items.length)]);
@@ -195,14 +192,14 @@ const NewTransaction: NextPage = () => {
                       value={data.item}
                       idKey="_id"
                       labelKey="name"
-                      options={Items().data}
+                      options={Items?.data || []}
                       onChange={(val) => itemChanged(val as string, idx)}
                     />
                   </td>
                   <td>
                     <p>
-                      {(Items().data.length &&
-                        Items().data.find((val) => val._id === data.item)
+                      {(Items?.data &&
+                        Items?.data.find((val) => val._id === data.item)
                           ?.unit) ||
                         "-"}
                     </p>

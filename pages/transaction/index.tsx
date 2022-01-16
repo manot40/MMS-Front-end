@@ -49,7 +49,7 @@ const Transaction: NextPage = () => {
       <h1 className="py-4 px-2 mt-2 text-2xl font-semibold">
         Daftar Transaksi
       </h1>
-      <Table data={tableData || [{ "": "Loading..." }]} />
+      <Table data={tableData} />
       <Pagination
         page={currentPage}
         pages={pages}
