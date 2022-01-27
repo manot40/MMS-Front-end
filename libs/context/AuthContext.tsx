@@ -69,6 +69,7 @@ export default function AuthProvider({
           .getCurrentUser(accessToken)
           .then((user) => setUser(user))
           .catch(() => {});
+        return accessToken;
       })
       .catch((_error) => {
         window.localStorage.clear();
@@ -83,8 +84,8 @@ export default function AuthProvider({
       const tokenExp = jwtDecode<any>(token) || 0;
       if (!isTokenExpire(refreshExp)) {
         if (isTokenExpire(tokenExp))
-          return refreshToken(refresh).then(() =>
-            axiosFetcher(url, { ...options, token })
+          return refreshToken(refresh).then((token_) =>
+            axiosFetcher(url, { ...options, token_ })
           );
         else return axiosFetcher(url, { ...options, token });
       } else {
