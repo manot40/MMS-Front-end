@@ -13,11 +13,12 @@
     "clsx": "^1.1.1",
     "dayjs": "^1.10.7",
     "jwt-decode": "^3.1.2",
-    "next": "12.0.7",
+    "next": "12.0.9",
     "next-pwa": "^5.4.4",
     "next-themes": "^0.0.15",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-table": "^7.7.0",
     "swr": "^1.1.2"
   },
   "devDependencies": {

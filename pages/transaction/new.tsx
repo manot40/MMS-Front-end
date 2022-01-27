@@ -70,6 +70,7 @@ const NewTransaction: NextPage = () => {
         },
       })
         .then(() => {
+          setItems(defaultData(2));
           setToast({
             type: "success",
             message: "Transaksi berhasil dibuat",
@@ -81,10 +82,7 @@ const NewTransaction: NextPage = () => {
             message: response.data.message,
           });
         })
-        .finally(() => {
-          setItems(defaultData(2));
-          setIsLoading(false);
-        });
+        .finally(() => setIsLoading(false));
     } else {
       setToast({
         type: "error",

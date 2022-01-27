@@ -48,7 +48,7 @@ export default function AuthProvider({
   useEffect(() => {
     const refresh = window ? localStorage.getItem("refreshToken") || "" : "";
     const exp = window ? localStorage.getItem("refreshExpiration") || 0 : 0;
-    if (!isTokenExpire(exp))
+    if (!isExpired(exp))
       refreshToken(refresh).then(() => setLoadingInitial(false));
     else setLoadingInitial(false);
   }, []);
@@ -74,6 +74,7 @@ export default function AuthProvider({
       .catch((_error) => {
         window.localStorage.clear();
         push("/login?loggedOut=true");
+        return "";
       });
   }
 
@@ -81,11 +82,11 @@ export default function AuthProvider({
     if (!loadingInitial) {
       const refresh = localStorage.getItem("refreshToken") || "";
       const refreshExp = localStorage.getItem("refreshExpiration") || 0;
-      const tokenExp = jwtDecode<any>(token) || 0;
-      if (!isTokenExpire(refreshExp)) {
-        if (isTokenExpire(tokenExp))
-          return refreshToken(refresh).then((token_) =>
-            axiosFetcher(url, { ...options, token_ })
+      const tokenExp = jwtDecode<any>(token).exp || 0;
+      if (!isExpired(refreshExp)) {
+        if (isExpired(tokenExp))
+          return refreshToken(refresh).then((_token) =>
+            axiosFetcher(url, { ...options, token: _token })
           );
         else return axiosFetcher(url, { ...options, token });
       } else {
@@ -136,7 +137,7 @@ export default function AuthProvider({
       });
   }
 
-  function isTokenExpire(exp: string | number) {
+  function isExpired(exp: string | number) {
     return +exp - dayjs().unix() < 30;
   }
 
