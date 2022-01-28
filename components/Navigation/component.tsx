@@ -20,7 +20,6 @@ const Component: FC = () => {
   const { width } = useWindowSize();
   const { user, logout } = useAuth();
   const avatar = user?.avatar || "default.jpg";
-  console.log(avatar);
   const optionClass = "px-4 py-4 md:py-3 select-none text-sm cursor-pointer border-b dark:border-neutral-800 hover:bg-neutral-200 hover:dark:bg-neutral-700 hover:dark:text-white hover:text-black";
 
   useEffect(() => setMounted(true), []);
