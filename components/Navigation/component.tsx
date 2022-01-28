@@ -19,6 +19,8 @@ const Component: FC = () => {
   const { pathname } = useRouter();
   const { width } = useWindowSize();
   const { user, logout } = useAuth();
+  const avatar = user?.avatar || "default.jpg";
+  console.log(avatar);
   const optionClass = "px-4 py-4 md:py-3 select-none text-sm cursor-pointer border-b dark:border-neutral-800 hover:bg-neutral-200 hover:dark:bg-neutral-700 hover:dark:text-white hover:text-black";
 
   useEffect(() => setMounted(true), []);
@@ -73,7 +75,7 @@ const Component: FC = () => {
         >
           <span className="block px-2 self-center w-6 h-6 text-sm cursor-pointer">
             <Image
-              src={profile}
+              src={`${process.env.NEXT_PUBLIC_OBJECT_STORAGE_URL}/images/user/` + avatar}
               alt="profile"
               layout="fill"
               className="rounded-full"
@@ -92,7 +94,7 @@ const Component: FC = () => {
             <div className="flex px-4 py-4 md:py-3 select-none text-sm border-b dark:border-neutral-800 hover:text-current">
               <span className="self-center mt-1">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_OBJECT_STORAGE_URL}/images/user/` + (user?.avatar || "default.jpg")}
+                  src={`${process.env.NEXT_PUBLIC_OBJECT_STORAGE_URL}/images/user/` + avatar}
                   alt="Yeah"
                   width={36}
                   height={36}
