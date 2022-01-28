@@ -92,7 +92,7 @@ const Component: FC = () => {
             <div className="flex px-4 py-4 md:py-3 select-none text-sm border-b dark:border-neutral-800 hover:text-current">
               <span className="self-center mt-1">
                 <Image
-                  src={profile}
+                  src={`${process.env.NEXT_PUBLIC_OBJECT_STORAGE_URL}/images/user/` + (user?.avatar || "default.jpg")}
                   alt="Yeah"
                   width={36}
                   height={36}
