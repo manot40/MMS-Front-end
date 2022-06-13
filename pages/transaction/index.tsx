@@ -1,23 +1,18 @@
 import usePagination from "libs/hooks/usePagination";
-import { useAuth } from "libs/context/AuthContext";
 import { Pagination, Table } from "components";
 import { NextPage } from "next/types";
 import { Dashboard } from "layout";
 import Link from "next/link";
-import useSWR from "swr";
 import { useState } from "react";
-import { ResOK, Transaction } from "type";
 import dayjs from "dayjs";
+
+import { useGetTransactions } from "libs/apis/transaction";
 
 const Transaction: NextPage = () => {
   const [page, setPage] = useState(1);
-  const { fetcher } = useAuth();
 
   const Transactions = () => {
-    const { data } = useSWR<ResOK<Transaction[]>>(
-      `/transaction?page=${page}&limit=${10}&sort=txDate&order=desc`,
-      fetcher
-    );
+    const { data } = useGetTransactions({page, limit: 10});
     return data ? data : { data: [], totalPages: 0 };
   };
 

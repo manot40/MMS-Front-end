@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Input, Select, Button, Toast } from "components";
 import { useCallback, useEffect, useState } from "react";
 import { useWindowSize } from "libs/hooks/useWindowSize";
-import { useAuth } from "libs/context/AuthContext";
-import { Input, Select, Button, Toast } from "components";
 import { Item, ResOK } from "type";
 import { Dashboard } from "layout";
 import { NextPage } from "next";
@@ -10,27 +9,27 @@ import dayjs from "dayjs";
 import useSWR from "swr";
 import clsx from "clsx";
 
+import * as trxApi from "libs/apis/transaction";
+import * as whApi from "libs/apis/warehouse";
+import * as itemsApi from "libs/apis/items";
+
 const NewTransaction: NextPage = () => {
-  const { fetcher } = useAuth();
   const { width } = useWindowSize();
   const [toast, setToast] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const [type, setType] = useState("");
+  const [type, setType] = useState("" as "in" | "out");
   const [warehouse, setWarehouse] = useState("");
   const [desc, setDesc] = useState(`Transaksi ${dayjs().format("DD MMMM")}`);
   const [items, setItems] = useState(defaultData(2));
 
   const Warehouses = () => {
-    const { data } = useSWR<ResOK<any>>("/warehouse", fetcher);
+    const { data } = whApi.useGetWarehouses({ limit: 100, page: 1 });
     return data ? data : { data: [] };
   };
 
-  const { data: Items } = useSWR<ResOK<Item[]>>(
-    warehouse ? `/item?warehouse=${warehouse}` : null,
-    fetcher
-  );
+  const { data: Items } = itemsApi.useAllItems(warehouse);
 
   useEffect(() => {
     setItems([...defaultData(items.length)]);
@@ -59,16 +58,14 @@ const NewTransaction: NextPage = () => {
   const handleSubmit = () => {
     if (!items.find((item) => !item.item || item.quantity < 1)) {
       setIsLoading(true);
-      fetcher<any>("/transaction", {
-        method: "post",
-        data: {
+      trxApi
+        .usePostTransaction({
           txDate: date,
           description: desc,
           type,
           warehouse,
-          items: items,
-        },
-      })
+          items,
+        })
         .then(() => {
           setItems(defaultData(2));
           setToast({
@@ -142,7 +139,7 @@ const NewTransaction: NextPage = () => {
               { id: "out", label: "Keluar" },
               { id: "in", label: "Masuk" },
             ]}
-            onChange={(val) => setType(val as string)}
+            onChange={(val) => setType(val as any)}
           />
           <Select
             value={warehouse}

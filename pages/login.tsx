@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   const [password, setPassword] = useState("");
   const [toasts, setToasts] = useState<ToastOpt>({} as ToastOpt);
 
-  const { loading, login } = useAuth();
+  const { user, loading, login } = useAuth();
   const { push, query } = useRouter();
 
   function redirect() {
@@ -39,6 +39,8 @@ const Home: NextPage = () => {
     },
     [login, password, username]
   );
+
+  if (user) redirect();
 
   return (
     <div className="container mx-auto max-w-xs h-screen flex items-center -m-8">
