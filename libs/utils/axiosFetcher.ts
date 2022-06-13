@@ -1,29 +1,36 @@
-import axios from "axios";
-import { AxiosMethod, Obj } from "type";
+import axios, { AxiosResponse } from "axios";
 
-axios.defaults.baseURL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
 
-export type FetcherOptions = {
-  method?: AxiosMethod;
-  data?: Obj;
-  config?: Obj;
-  token?: string;
+const Axios = axios.create({
+  baseURL,
+  withCredentials: true,
+});
+
+const fetcher = {
+  get: <R = any>(url: string): Promise<R> => {
+    return Axios.get(url).then(handleResponse);
+  },
+  delete: <R = any>(url: string): Promise<R> => {
+    return Axios.delete(url).then(handleResponse);
+  },
+  post: <R = any, T = unknown>(url: string, data: T): Promise<R> => {
+    return Axios.post(url, data).then(handleResponse);
+  },
+  put: <R = any, T = unknown>(url: string, data: T): Promise<R> => {
+    return Axios.put(url, data).then(handleResponse);
+  },
+  patch: <R = any, T = unknown>(url: string, data: T): Promise<R> => {
+    return Axios.patch(url, data).then(handleResponse);
+  },
+  default: Axios,
 };
 
-async function axiosFetcher<T = unknown>(
-  url: string,
-  options: FetcherOptions
-): Promise<T> {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${options.token}`;
-  switch (options.method) {
-    case "post" || "put" || "patch":
-      const res = await axios[options.method](url, options.data, options.config);
-      return res.data;
-    default:
-      const res_1 = await axios[options.method || "get"](url, options.config);
-      return res_1.data;
-  }
-};
+function handleResponse(res: AxiosResponse) {
+  const token = res.headers["x-access-token"];
+  if (token) Axios.defaults.headers.common["authorization"] = token;
+  if (res.status == 401) localStorage.removeItem("isLoggedIn");
+  return res.data;
+}
 
-export default axiosFetcher;
+export default fetcher;

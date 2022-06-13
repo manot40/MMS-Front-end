@@ -1,4 +1,4 @@
-import axiosFetcher from "libs/utils/axiosFetcher";
+import axios from "libs/utils/axiosFetcher";
 import { ResOK, User } from "type";
 
 interface IUserRegister {
@@ -9,19 +9,14 @@ interface IUserRegister {
   affiliation: string;
 }
 
-export const getCurrentUser = async (token: string): Promise<User> => {
-  const { data } = await axiosFetcher<ResOK<User>>("/user/me", { token });
-  return data;
+export const getCurrentUser = async () => {
+  return await axios.get("/user/me");
 };
 
 export const register = async (
   user: IUserRegister,
   token: string
 ): Promise<User> => {
-  const { data } = await axiosFetcher<ResOK<User>>("/user/register", {
-    method: "post",
-    data: user,
-    token,
-  });
+  const { data } = await axios.post<ResOK<User>>("/user/register", user);
   return data;
 };

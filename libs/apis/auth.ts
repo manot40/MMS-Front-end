@@ -1,4 +1,4 @@
-import axiosFetcher from "libs/utils/axiosFetcher";
+import axios from "libs/utils/axiosFetcher";
 
 interface LoginInfo {
   username: string;
@@ -11,24 +11,10 @@ export type Token = {
   refreshToken: string;
 };
 
-export const login = async (loginInfo: LoginInfo): Promise<Token> => {
-  return await axiosFetcher("/auth/login", {
-    method: "post",
-    data: loginInfo,
-  });
+export const login = async (loginInfo: LoginInfo) => {
+  return await axios.post("/auth/login", loginInfo).then(res => res.data);
 };
 
-export const logout = async (token: string): Promise<void> => {
-  await axiosFetcher("/auth/logout", { method: "delete", token });
-};
-
-export const refresh = async (
-  refreshToken: string,
-  token?: string
-): Promise<Token> => {
-  return await axiosFetcher("/auth/refresh", {
-    method: "post",
-    token,
-    data: { refreshToken },
-  });
+export const logout = async () => {
+  return await axios.delete("/auth/logout");
 };
